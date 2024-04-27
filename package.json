@@ -10,7 +10,9 @@
     "vue": "^3.4.25"
   },
   "scripts": {
-    "dev": "vitepress dev docs",
-    "build": "vitepress build docs"
+    "docs:dev": "vitepress dev docs --open",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs --open",
+    "docs:deploy": "./deploy.sh"
   }
 }
