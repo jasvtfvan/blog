@@ -1,10 +1,13 @@
-## VitePress教程
-
-有着vuepress的搭建经验，上手还算OK
-
-官方文档目前还没有中文，于是自己尝试搭建了一下
-
+## jasvtfvan博客
+基于VitePress的博客，包括常用工具、步骤、开源说明等。
 
 ## 访问
 
-https://vitepress.yiov.top/
+https://jasvtfvan.github.io/blog/
+
+旧地址 https://jasvtfvan.github.io/fe-blog/
+
+## 鸣谢
+
+该项目基于 https://github.com/Yiov/vitepress-doc VitePress教程
+链接地址 https://vitepress.yiov.top/
