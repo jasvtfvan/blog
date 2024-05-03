@@ -151,11 +151,6 @@ export default defineConfig({
       label: 'English',
       lang: 'en',
       link: '/en/',
-    },
-    fr: {
-      label: 'French',
-      lang: 'fr',
-      link: '/fr/',
     }
   },
 

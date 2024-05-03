@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 //命令集：npm add -D vitepress vue less sass @mdit-vue/shared vitepress-markdown-timeline medium-zoom vitepress-plugin-comment-with-giscus
 
-import timeline from "vitepress-markdown-timeline"; 
+import timeline from "vitepress-markdown-timeline";
 
 export default defineConfig({
   lang: 'zh-CN',
@@ -11,7 +11,7 @@ export default defineConfig({
 
   // #region fav
   head: [
-    ['link',{ rel: 'icon', href: '/blog/logo.png'}],
+    ['link', { rel: 'icon', href: '/blog/logo.png' }],
   ],
   // #endregion fav
 
@@ -32,18 +32,13 @@ export default defineConfig({
       label: 'English',
       lang: 'en',
       link: '/en/',
-    },
-    fr: {
-      label: 'French',
-      lang: 'fr',
-      link: '/fr/',
     }
   },
 
   //markdown配置
   markdown: {
     //行号显示
-    lineNumbers: true, 
+    lineNumbers: true,
 
     //时间线 
     config: (md) => {
@@ -58,8 +53,18 @@ export default defineConfig({
   },
 
 
+  lastUpdated: true, //此配置不会立即生效，需git提交后爬取时间戳，本地报错可以先注释
+
   //主题配置
   themeConfig: {
+    //上次更新时间
+    lastUpdated: {
+      text: 'Updated at',
+      formatOptions: {
+        dateStyle: 'full',
+        timeStyle: 'medium'
+      },
+    },
     //左上角logo
     // logo: '/blog/logo.png',
     //logo: 'https://vitejs.cn/vite3-cn/logo-with-shadow.png', //远程引用
@@ -72,17 +77,16 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       {
-        text: '指南',
+        text: '目录',
         items: [
           {
-            // 分组标题1
-            text: '介绍',
+            text: '开发工具',
             items: [
+              { text: 'git', link: '/devtools/git/' },
               { text: '前言', link: '/preface' },
             ],
           },
           {
-            // 分组标题2
             text: '基础设置',
             items: [
               { text: '快速上手', link: '/getting-started' },
@@ -108,22 +112,21 @@ export default defineConfig({
           },
         ],
       },
-      { text: 'VitePress', link: 'https://vitepress.dev/zh/',noIcon: true },
+      { text: '原博客', link: 'https://jasvtfvan.github.io/fe-blog/', noIcon: true },
     ],
 
 
     //侧边栏
     sidebar: [
       {
-        //分组标题1
-        text: '介绍',
+        text: '开发工具',
         collapsed: false,
         items: [
+          { text: 'git', link: '/devtools/git/' },
           { text: '前言', link: '/preface' },
         ],
       },
       {
-        //分组标题2
         text: '基础配置',
         collapsed: false,
         items: [
@@ -134,7 +137,6 @@ export default defineConfig({
         ],
       },
       {
-        //分组标题3
         text: '进阶玩法',
         collapsed: false,
         items: [
@@ -194,15 +196,15 @@ export default defineConfig({
 
 
     //侧边栏文字更改(移动端)
-    sidebarMenuLabel:'目录',
+    sidebarMenuLabel: '目录',
 
     //返回顶部文字修改(移动端)
-    returnToTopLabel:'返回顶部',
+    returnToTopLabel: '返回顶部',
 
 
     //大纲显示2-3级标题
     outline: {
-      level: [2,3],
+      level: [2, 3],
       label: '当前页大纲'
     },
 
@@ -215,12 +217,12 @@ export default defineConfig({
 
 
     //自定义上下页名
-    docFooter: { 
-      prev: '上一页', 
-      next: '下一页', 
-    }, 
+    docFooter: {
+      prev: '上一页',
+      next: '下一页',
+    },
 
   },
 
-  
+
 })
