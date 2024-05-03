@@ -59,10 +59,9 @@ export default defineConfig({
   themeConfig: {
     //上次更新时间
     lastUpdated: {
-      text: 'Updated at',
+      text: '更新于',
       formatOptions: {
         dateStyle: 'full',
-        timeStyle: 'medium'
       },
     },
     //左上角logo
