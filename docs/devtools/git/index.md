@@ -1,5 +1,4 @@
-# Git和git-flow
-![git-logo](./images/git-logo.png)
+# Git 和 git-flow
 
 ## 1. Git介绍
 Git是目前世界上最先进的分布式版本控制系统，由linux之父`Linus Torvalds`开发完成
@@ -24,6 +23,13 @@ Git是目前世界上最先进的分布式版本控制系统，由linux之父`Li
 每位developer都可以对origin进行pull/push操作，同时developer之间可以相互pull/push。<br>
 Alice and Bob, Alice and David, and Clair and David 构成了3个小组。
 * **这就是各个分布式的PC端版本库的关系，一般人们熟知的gitlab/github就处于origin这个位置。**
+
+### 1.4 sourcetree
+推荐的分支比对工具<br>
+[https://www.sourcetreeapp.com/](https://www.sourcetreeapp.com/)<br>
+免费工具，支持windows和macOS<br>
+**建议：UI工具只用来查看或检查问题，主要功能利用命令实现**
+
 
 ## 2. Git客户端工具
 ### 2.1 工具下载
@@ -275,42 +281,110 @@ git cherry-pick <commit>
 >在master分支上修复的bug，想要合并到当前dev分支<br>
 >使用该命令，把bug提交的修改“复制”到当前分支，避免重复劳动
 
-## 3. git-flow
-### 3.1 git-flow介绍
+## 3. RSA密钥对配置
+github、gitee、gitlab等多账号配置
+### 3.1 别名法（推荐）
+1. 生成新的密钥对
+```sh
+ssh-keygen -t rsa -C anotherEmail@163.com
+```
+2. 修改密钥对文件名，不要覆盖默认的
+>Enter file in which to save the key (/Users/$USER/.ssh/id_rsa):
+```sh
+/Users/$USER/.ssh/id_rsa_another
+```
+3. 查看`config`文件是否存在
+```ls ~/.ssh/```
+4. 创建config文件
+```touch ~/.ssh/config```
+5. 编辑config文件
+```vim ~/.ssh/config```
+```sh
+#Default
+Host gitee.com
+Hostname gitee.com
+IdentityFile ~/.ssh/id_rsa
+
+Host github.com
+Hostname github.com
+IdentityFile ~/.ssh/id_rsa
+
+Host 123.56.159.159
+Hostname 123.56.159.159
+IdentityFile ~/.ssh/id_rsa
+
+#another
+Host s.github.com
+Hostname github.com
+IdentityFile ~/.ssh/id_rsa_another
+```
+6. 测试弱链接
+```sh
+ssh -T git@gitee.com
+ssh -T git@github.com
+ssh -p 9222 -T git@123.56.159.159
+ssh -T -v git@s.github.com
+```
+>公式`ssh -T -v git@[config配置的host值]`,-v显示详细信息
+
+### 3.2 切换法（不推荐）
+1. 生成新的密钥对
+```sh
+ssh-keygen -t rsa -C anotherEmail@163.com
+```
+2. 修改密钥对文件名，不要覆盖默认的
+>Enter file in which to save the key (/Users/$USER/.ssh/id_rsa):
+```sh
+/Users/$USER/.ssh/id_rsa_another
+```
+3. 查看`ssh agent`
+```ssh-add -l```
+4. 添加使用的密钥到`agent`，其中`-K`放到keychain中
+```sh
+ssh-add -K ~/.ssh/id_rsa_another
+```
+>删除其中一个`ssh-add -d ~/.ssh/id_rsa`
+>如果临时使用不要加`-K`
+5. 查看`ssh agent`
+```ssh-add -l```
+6. 切换到`id_rsa_another`密钥，默认密钥将失效
+
+## 4. git-flow（适合复杂工程）
+### 4.1 git-flow介绍
 git工作流，就像代码需要代码规范一样，代码管理同样需要一个清晰的流程和规范<br>
 `Vincent Driessen` 为了解决这个问题提出了 [A Successful Git Branching Model](https://nvie.com/posts/a-successful-git-branching-model/)
-### 3.2 git-flow分支图
+### 4.2 git-flow分支图
 <img src="./images/git-flow.png" height="700"/>
 
-### 3.3 各分支职责
-#### 3.3.1 Master分支
+### 4.3 各分支职责
+#### 4.3.1 Master分支
 **主分支**，唯一且稳定的分支。只能来自`Release`或`Hotfix`的合并。
-#### 3.3.2 Develop分支
+#### 4.3.2 Develop分支
 **开发分支**，唯一的。从该分支新建`Feature`分支，并将`Feature`分支合并到该分支。<br>
 发布`Release`分支<br>
 合并`Hotfix`分支，前提是`Release`分支不存在
-#### 3.3.3 Feature分支
+#### 4.3.3 Feature分支
 **功能分支**，从`Develop`创新新功能，完成后合并到`Develop`。<br>
 如果push到远程服务器origin，可以协作开发。
-#### 3.3.4 Release分支
+#### 4.3.4 Release分支
 **发布版本分支**，同一时间只有一个`Release`分支。<br>
 测试修复bug，注意少量bug。<br>
 合并到`Master`和`Develop`，并打tag。
-#### 3.3.5 Hotfix分支
+#### 4.3.5 Hotfix分支
 **紧急修复分支**，基于`Master`分支，修复bug后合并会`Master`分支，并且打tag。<br>
 如果`Release`存在，则合并到`Release`，否则合并到`Develop`。
 
-### 3.4 git-flow安装
+### 4.4 git-flow安装
 ```bash
  brew install git-flow-avh
 ```
 
-### 3.5 git-flow命令
-#### 3.5.1 初始化命令
+### 4.5 git-flow命令
+#### 4.5.1 初始化命令
 ```bash
 git flow init
 ```
-#### 3.5.2 feature命令
+#### 4.5.2 feature命令
 * 创建一个feature
 ```bash
 git flow feature start feature1
@@ -321,7 +395,7 @@ git flow feature start feature1
 git flow feature finish feature1
 ```
 >合并`feature1`分支到`develop`，删除`feature1`分支，切换回`develop`分支
-#### 3.5.3 release命令
+#### 4.5.3 release命令
 * 创建一个release
 ```bash
 git flow release start v1.0.1
@@ -336,7 +410,7 @@ git flow release finish v1.0.1
 ```bash
 git push --tags
 ```
-#### 3.5.4 hotfix命令
+#### 4.5.4 hotfix命令
 * 创建一个hotfix
 ```bash
 git flow hotfix start v1.0.2
@@ -348,7 +422,7 @@ git flow hotfix finish v1.0.2
 ```
 >合并`hotfix`分支到`master`，如果`release`存在，合并到`release`，否则合并到`develop`<br>
 >删除`hotfix`分支，切换回`develop`分支
-#### 3.5.5 通用命令
+#### 4.5.5 通用命令
 * 发布
 ```bash
 git flow <feature/release> publish <feature1/v1.0.1>
@@ -357,7 +431,3 @@ git flow <feature/release> publish <feature1/v1.0.1>
 ```bash
 git flow <feature/release> pull origin <feature1/v1.0.1>
 ```
-### 3.6 推荐UI工具
-[推荐UI工具](https://www.sourcetreeapp.com/)<br>
-免费工具，支持windows和macOS<br>
-**建议：UI工具只用来查看或检查问题，主要功能利用命令实现**

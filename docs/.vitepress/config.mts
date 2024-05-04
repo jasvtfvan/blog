@@ -75,6 +75,7 @@ export default defineConfig({
     //导航栏
     nav: [
       { text: '首页', link: '/' },
+      { text: 'markdown', link: '/markdown' },
       {
         text: '目录',
         items: [
@@ -82,36 +83,29 @@ export default defineConfig({
             text: '开发工具',
             items: [
               { text: 'git', link: '/devtools/git/' },
-              { text: '前言', link: '/preface' },
+              { text: 'vscode', link: '/devtools/vscode/' },
+              { text: 'node', link: '/devtools/node/' },
+              { text: 'go', link: '/devtools/go/' },
+              { text: 'docker-desktop', link: '/devtools/docker-desktop' },
+              { text: 'shadowsocks', link: '/devtools/shadowsocks' },
             ],
           },
           {
-            text: '基础设置',
+            text: '系统工具',
             items: [
-              { text: '快速上手', link: '/getting-started' },
-              { text: '配置', link: '/configuration' },
-              { text: '页面', link: '/page' },
-              { text: 'Frontmatter', link: '/frontmatter' },
+              { text: 'parallels-desktop', link: '/ostools/parallels-desktop' },
             ],
           },
           {
-            // 分组标题3
-            text: '进阶玩法',
+            text: '系统部署',
             items: [
-              { text: 'Markdown', link: '/markdown' },
-              { text: '团队', link: '/team' },
-              { text: '静态部署', link: '/assets' },
-              { text: '样式美化', link: '/style' },
-              { text: '组件', link: '/components' },
-              { text: '布局插槽', link: '/layout' },
-              { text: '插件', link: '/plugin' },
-              { text: '更新及卸载', link: '/update' },
-              { text: '搭建导航', link: '/nav/' },
+              { text: 'docker', link: '/deploy/docker/' },
             ],
           },
         ],
       },
       { text: '原博客', link: 'https://jasvtfvan.github.io/fe-blog/', noIcon: true },
+      { text: 'Vue3/Go', link: 'https://github.com/jasvtfvan/oms-admin', noIcon: true },
     ],
 
 
@@ -122,32 +116,25 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: 'git', link: '/devtools/git/' },
-          { text: '前言', link: '/preface' },
+          { text: 'vscode', link: '/devtools/vscode/' },
+          { text: 'node', link: '/devtools/node/' },
+          { text: 'go', link: '/devtools/go/' },
+          { text: 'docker-desktop', link: '/devtools/docker-desktop' },
+          { text: 'shadowsocks', link: '/devtools/shadowsocks' },
         ],
       },
       {
-        text: '基础配置',
+        text: '系统工具',
         collapsed: false,
         items: [
-          { text: '快速上手', link: '/getting-started' },
-          { text: '配置', link: '/configuration' },
-          { text: '页面', link: '/page' },
-          { text: 'Frontmatter', link: '/frontmatter' },
+          { text: 'parallels-desktop', link: '/ostools/parallels-desktop' },
         ],
       },
       {
-        text: '进阶玩法',
+        text: '系统部署',
         collapsed: false,
         items: [
-          { text: 'Markdown', link: '/markdown' },
-          { text: '团队', link: '/team' },
-          { text: '静态部署', link: '/assets' },
-          { text: '样式美化', link: '/style' },
-          { text: '组件', link: '/components' },
-          { text: '布局插槽', link: '/layout' },
-          { text: '插件', link: '/plugin' },
-          { text: '更新及卸载', link: '/update' },
-          { text: '搭建导航', link: '/nav/' },
+          { text: 'docker', link: '/deploy/docker/' },
         ],
       },
     ],

@@ -2,16 +2,16 @@
 layout: home
 
 hero:
-  name: VitePress
-  text: "快速上手中文教程"
-  tagline: 如果你也想搭建它，那跟我一起做吧
+  name: Jasvt Fvan Blog
+  text: "基于VitePress的博客"
+  tagline: 具体内容详见目录（源码参考VitePress最佳网站）
   image:
     src: /logo.png
     alt: VitePress
   actions:
     - theme: brand
       text: 开始
-      link: /getting-started
+      link: /markdown
     - theme: alt
       text: GitHub
       link: https://github.com/jasvtfvan/blog

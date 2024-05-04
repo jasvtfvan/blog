@@ -2,16 +2,16 @@
 layout: home
 
 hero:
-  name: VitePress
-  text: "getting-started Chinese Tutorial"
-  tagline: If you want to build it, then do it with me
+  name: Jasvt Fvan Blog
+  text: "Build With VitePress"
+  tagline: Look at the directory to get details
   image:
     src: /logo.png
     alt: VitePress
   actions:
     - theme: brand
       text: Get started
-      link: /getting-started
+      link: /markdown
     - theme: alt
       text: GitHub
       link: https://github.com/jasvtfvan/blog
