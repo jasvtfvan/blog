@@ -175,3 +175,35 @@ curl -SL https://github.com/docker/compose/releases/download/v2.27.0/docker-comp
 chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 docker compose version
 ```
+
+## 4. chmod权限说明
+
+1. 查看文件读写执行权限
+
+```sh
+ls -l
+```
+
+::: tip drwxr-xr-x
+分成4段：d、rwx、r-x、r-x
+
+d 代表文件夹; - 代表文件
+
+rwx 所有者可读/可写/可执行
+
+r-x 组用户可读/不可写/可执行
+
+r-x 其他用户可读/不可写/可执行
+:::
+
+2. 让文件可执行
+
+```sh
+chmod +x 文件名
+```
+
+3. 让所有人可以执行
+
+```sh
+chmod a+x 文件名
+```
