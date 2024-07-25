@@ -91,6 +91,12 @@ export default defineConfig({
             ],
           },
           {
+            text: '开发环境',
+            items: [
+              { text: 'uni-app x', link: '/development/uniappx/' },
+            ],
+          },
+          {
             text: '系统工具',
             items: [
               { text: 'parallels-desktop', link: '/ostools/parallels-desktop' },
@@ -121,6 +127,13 @@ export default defineConfig({
           { text: 'go', link: '/devtools/go/' },
           { text: 'docker-desktop', link: '/devtools/docker-desktop' },
           { text: 'shadowsocks', link: '/devtools/shadowsocks' },
+        ],
+      },
+      {
+        text: '开发环境',
+        collapsed: false,
+        items: [
+          { text: 'uni-app x', link: '/development/uniappx/' },
         ],
       },
       {
