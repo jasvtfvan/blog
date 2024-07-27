@@ -288,6 +288,8 @@ defaultConfig {
 
 修改后点击`build.gradle`右上角的`Sync`
 
+>注意：使用`noinspection ExpiredTargetSdkVersion`忽略Google Play的报错，创建虚拟机时，不要创建`Google APIs`的
+
 ### 4.5. `uniappx-test`工程配置
 
 1. `build.gradle`配置
