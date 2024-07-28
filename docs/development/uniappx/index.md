@@ -141,6 +141,8 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.181-b13, mixed mode)
 
 1. 拷贝基础库包
 
+* lib拷贝
+
 将`Android-uni-app-x-SDK@12048-4.24/SDK/libs/`目录下的
 
 ```console
@@ -165,7 +167,16 @@ uni-rpx2px-release.aar
 uni-theme-release.aar
 ```
 
-共19个aar拷贝到libs下，如果没有libs需要手动创建
+共19个aar拷贝到`/LocalRepo/`下，并创建对应的目录和`build.gradle`，手动创建
+
+![lib](./images/android-sudio-lib.png)
+
+* `build.gradle`文件编写
+
+```console
+configurations.maybeCreate("default")
+artifacts.add("default", file("各个包名xxx.aar"))
+```
 
 2. `settings.gradle`配置
 
@@ -181,6 +192,27 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+...
+
+include ':LocalRepo:android-gif-drawable'
+include ':LocalRepo:app-common-release'
+include ':LocalRepo:app-runtime-release'
+include ':LocalRepo:breakpad-build-release'
+include ':LocalRepo:dcloud-layout-release'
+include ':LocalRepo:framework-release'
+include ':LocalRepo:uni-exit-release'
+include ':LocalRepo:uni-getAccessibilityInfo-release'
+include ':LocalRepo:uni-getAppAuthorizeSetting-release'
+include ':LocalRepo:uni-getAppBaseInfo-release'
+include ':LocalRepo:uni-getDeviceInfo-release'
+include ':LocalRepo:uni-getSystemInfo-release'
+include ':LocalRepo:uni-getSystemSetting-release'
+include ':LocalRepo:uni-openAppAuthorizeSetting-release'
+include ':LocalRepo:uni-prompt-release'
+include ':LocalRepo:uni-rpx2px-release'
+include ':LocalRepo:uni-storage-release'
+include ':LocalRepo:uni-theme-release'
+include ':LocalRepo:uts-runtime-release'
 ```
 
 3. `gradle.properties`配置
@@ -196,7 +228,8 @@ android.enableJetifier=true
 
 1. `build.gradle`
 
-添加aaptOptions配置，修改libs路径
+* 添加aaptOptions配置
+* 添加lib依赖
 
 ```console
 android {
@@ -206,10 +239,28 @@ android {
         ignoreAssetsPattern '!.svn:!.git:.*:!CVS:!thumbs.db:!picasa.ini:!*.scc:*~'
     }
 }
+...
 dependencies {
-    ... ...
-    // implementation project(':uniappx-test')
-    implementation fileTree(include: ['*.aar'], dir: '../libs')
+    implementation project(':LocalRepo:android-gif-drawable')
+    implementation project(':LocalRepo:app-common-release')
+    implementation project(':LocalRepo:app-runtime-release')
+    implementation project(':LocalRepo:breakpad-build-release')
+    implementation project(':LocalRepo:dcloud-layout-release')
+    implementation project(':LocalRepo:framework-release')
+    implementation project(':LocalRepo:uni-exit-release')
+    implementation project(':LocalRepo:uni-getAccessibilityInfo-release')
+    implementation project(':LocalRepo:uni-getAppAuthorizeSetting-release')
+    implementation project(':LocalRepo:uni-getAppBaseInfo-release')
+    implementation project(':LocalRepo:uni-getDeviceInfo-release')
+    implementation project(':LocalRepo:uni-getSystemInfo-release')
+    implementation project(':LocalRepo:uni-getSystemSetting-release')
+    implementation project(':LocalRepo:uni-openAppAuthorizeSetting-release')
+    implementation project(':LocalRepo:uni-prompt-release')
+    implementation project(':LocalRepo:uni-rpx2px-release')
+    implementation project(':LocalRepo:uni-storage-release')
+    implementation project(':LocalRepo:uni-theme-release')
+    implementation project(':LocalRepo:uts-runtime-release')
+...
 }
 ```
 
@@ -238,9 +289,7 @@ dependencies {
 <meta-data android:name="DCLOUD_UNI_APPID" android:value="__UNI__D2FF1D0" />
 ```
 
-
-
-### 4.4. 新建`uniappx-test`模块
+### 4.4. `uniappx-test`工程配置
 
 1. 创建模块
 
@@ -290,9 +339,7 @@ defaultConfig {
 
 >注意：使用`noinspection ExpiredTargetSdkVersion`忽略Google Play的报错，创建虚拟机时，不要创建`Google APIs`的
 
-### 4.5. `uniappx-test`工程配置
-
-1. `build.gradle`配置
+3. `build.gradle`配置
 
 * 添加插件依赖
 * 添加aaptOptions配置
@@ -312,7 +359,26 @@ android {
 }
 ... ...
 dependencies {
-	implementation fileTree(include: ['*.aar'], dir: '../libs')
+    implementation project(':LocalRepo:android-gif-drawable')
+    implementation project(':LocalRepo:app-common-release')
+    implementation project(':LocalRepo:app-runtime-release')
+    implementation project(':LocalRepo:breakpad-build-release')
+    implementation project(':LocalRepo:dcloud-layout-release')
+    implementation project(':LocalRepo:framework-release')
+    implementation project(':LocalRepo:uni-exit-release')
+    implementation project(':LocalRepo:uni-getAccessibilityInfo-release')
+    implementation project(':LocalRepo:uni-getAppAuthorizeSetting-release')
+    implementation project(':LocalRepo:uni-getAppBaseInfo-release')
+    implementation project(':LocalRepo:uni-getDeviceInfo-release')
+    implementation project(':LocalRepo:uni-getSystemInfo-release')
+    implementation project(':LocalRepo:uni-getSystemSetting-release')
+    implementation project(':LocalRepo:uni-openAppAuthorizeSetting-release')
+    implementation project(':LocalRepo:uni-prompt-release')
+    implementation project(':LocalRepo:uni-rpx2px-release')
+    implementation project(':LocalRepo:uni-storage-release')
+    implementation project(':LocalRepo:uni-theme-release')
+    implementation project(':LocalRepo:uts-runtime-release')
+
 	implementation("androidx.core:core-ktx:1.8.0")
 	implementation("androidx.recyclerview:recyclerview:1.0.0")
 	implementation("androidx.appcompat:appcompat:1.0.0")
@@ -344,7 +410,7 @@ dependencies {
 
 修改后点击`build.gradle`右上角的`Sync Now`
 
-2. 配置`gradle`插件
+4. 配置`gradle`插件
 
 在项目根目录的`build.gradle`的顶部添加gradle插件的依赖
 
@@ -359,13 +425,13 @@ buildscript {
 
 >检查根目录`plugins/`中是否有该依赖，如果没有则需要拷贝进来
 
-3. 合并`AndroidManifest.xml`
+5. 合并`AndroidManifest.xml`
 
 * 拷贝`app`主模块的`src/main/res`到`uniappx-test`
 * 拷贝`app`主模块的`AndroidManifest.xml`文件内容`uniappx-test`
 * 删除`android:name=".MainActivity"`的`activity`
 
-### 4.6. 拷贝资源文件
+### 4.5. 拷贝资源文件
 
 1. 从`HBuilderX`拷贝静态资源到app主模块
 
@@ -379,21 +445,85 @@ buildscript {
 
 >注意：不要破环java下原有目录结构
 
-### 4.7. `app主模块`依赖
+### 4.6. `app主模块`依赖更新
 
-将`uniappx-test`添加到`app主模块`依赖
+1. 删除无关模块
+
+除`app`和`uniappx-test`，其他都删除，下图中右键删除，删除后在硬盘中再删除
+
+![SDK版本](./images/android-studio-sdk.png)
+
+2. 修改依赖
+
+* 将`uniappx-test`添加到`app主模块`依赖
+* 删除之前残留的模块
 
 ```console
 dependencies {
-    ... ...
+//    implementation fileTree(include: ['**/*.aar'], dir: '../lib')
     implementation project(':uniappx-test')
+    ...
 }
 ```
 
+### 4.7. 打包apk
 
-## 10. 其他参考
+1. app主模块`build.gradle`
 
-### 10.1. MAC生成`.keystore`
+从开发者中心下载证书，获取相关信息
+
+```console
+android {
+    ...
+    defaultConfig {
+        applicationId "com.example.uniappx_test"
+        ...
+    }
+
+    signingConfigs {
+        config {
+            keyAlias '__uni__d2ff1d0'
+            keyPassword '开发者中心证书详情里拿到'
+            storeFile file('../__UNI__D2FF1D0.keystore')
+            storePassword '同keyPassword'
+            v1SigningEnabled true //兼容v1
+            v2SigningEnabled true //兼容v2
+        }
+    }
+
+    buildTypes {
+            debug {
+                signingConfig signingConfigs.config
+                ...
+            }
+            release {
+                signingConfig signingConfigs.config
+                ...
+            }
+    }
+    ...
+}
+```
+
+2. app主模块`Androidmanifest.xml`
+
+```console
+<meta-data android:name="dcloud_appkey" android:value="开发者中心的离线打包key" />
+```
+
+3. studio打包
+
+`Build` -> `Generate Signed App Bundle / APK` -> `APK` -> 下图 -> Next -> Release
+
+![keystore](./images/android-studio-keystore.png)
+
+4. 打包后apk所在路径
+
+`/app/release/app-release.apk`
+
+## 5. HBuilderX 云打包
+
+### 5.1. 生成`.keystore`
 
 1. 查看`jdk`地址
 
@@ -427,7 +557,23 @@ sudo keytool -genkey -alias AAAAAA -keyalg RSA -validity 36500 -keysize 1024 -ke
 sudo keytool -list -v -keystore java8.keystore
 ```
 
-### 10.2. HBuilderX 真机调试 (尚未成功)
+### 5.2. 选择发行
+
+![build-1](./images/HBuilderX-build-1.png)
+
+### 5.3. 选择证书
+
+当前选择`自定义证书`，也可以选择`云证书`（在开发者中心查看）
+
+![build-2](./images/HBuilderX-build-2.png)
+
+### 5.4. 下载`apk`
+
+![build-3](./images/HBuilderX-build-3.png)
+
+## 其他参考
+
+### 1. HBuilderX 真机调试 (尚未成功)
 
 1. android手机
 手机设置->关于手机->版本号（连点5下开启开发者模式），在开发人员选项菜单里开启USB调试
@@ -445,19 +591,4 @@ echo 0x12d1 >> ~/.android/adb_usb.ini
 ```
 
 5. 重启adb（HBuilderX）
-
-### 10.3. HBuilderX 云打包
-
-1. 导入本地项目
-
-2. 选中项目，进行云打包
-
-* 选择发行
-![build-1](./images/HBuilderX-build-1.png)
-
-* 选择证书
-![build-2](./images/HBuilderX-build-2.png)
-
-* 下载`apk`
-![build-3](./images/HBuilderX-build-3.png)
 
