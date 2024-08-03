@@ -571,9 +571,19 @@ sudo keytool -list -v -keystore java8.keystore
 
 ![build-3](./images/HBuilderX-build-3.png)
 
-## 其他参考
+## 6. 开发调试
 
-### 1. HBuilderX 真机调试 (尚未成功)
+### 6.1. HBuilderX 真机调试
+
+* `android掌上学习机`(android5.1.1)
+
+1. android手机
+Settings->System->Developer options->开启顶部总开关(On)->Debugging->开启USB debugging
+
+2. HBuilderX
+选中项目->运行->运行到手机或模拟器->运行到Android App基座
+
+* `华为手机`（尚未成功）
 
 1. android手机
 手机设置->关于手机->版本号（连点5下开启开发者模式），在开发人员选项菜单里开启USB调试
@@ -591,4 +601,9 @@ echo 0x12d1 >> ~/.android/adb_usb.ini
 ```
 
 5. 重启adb（HBuilderX）
+
+### 6.2. java插件
+
+1. kotlin引用java插件
+2. HBuilderX引用原生插件
 
