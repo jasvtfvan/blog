@@ -316,13 +316,23 @@ android {
 <meta-data android:name="dcloud_appkey" android:value="开发者中心的离线打包key" />
 ```
 
-3. studio打包
+3. app主模块`dcloud_control.xml`
+
+```console
+<hbuilder>
+<apps>
+    <app appid="__UNI__D2FF1D0" appver=""/>
+</apps>
+</hbuilder>
+```
+
+4. studio打包
 
 `Build` -> `Generate Signed App Bundle / APK` -> `APK` -> 下图 -> Next -> Release
 
 ![keystore](./images/android-studio-keystore.png)
 
-4. 打包后apk所在路径
+5. 打包后apk所在路径
 
 `/app/release/app-release.apk`
 
