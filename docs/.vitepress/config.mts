@@ -95,6 +95,7 @@ export default defineConfig({
             items: [
               { text: 'uni-app x android旧版', link: '/development/uniappx/index4.2.3' },
               { text: 'uni-app x android', link: '/development/uniappx/' },
+              { text: 'uni-app android', link: '/development/uniapp/index4.2.3' },
             ],
           },
           {
@@ -136,6 +137,7 @@ export default defineConfig({
         items: [
           { text: 'uni-app x android旧版', link: '/development/uniappx/index4.2.3' },
           { text: 'uni-app x android', link: '/development/uniappx/' },
+          { text: 'uni-app android', link: '/development/uniapp/index4.2.3' },
         ],
       },
       {
