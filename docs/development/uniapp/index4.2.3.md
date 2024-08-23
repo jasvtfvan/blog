@@ -209,6 +209,8 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
 
 ## 4. 离线Android项目
 
+官方文档: [https://nativesupport.dcloud.net.cn/AppDocs/usesdk/android.html](https://nativesupport.dcloud.net.cn/AppDocs/usesdk/android.html)
+
 ### 4.1. 导入`Android Studio`
 
 1. 下载地址: [https://nativesupport.dcloud.net.cn/AppDocs/download/android.html](https://nativesupport.dcloud.net.cn/AppDocs/download/android.html)
@@ -237,151 +239,60 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
 
 ![app](./images/android-studio-app.png)
 
-### 4.2. 拷贝基础库包
-
-将`Android-SDK@4.23.82121_20240704/SDK/libs/`目录下的
-和`Android-uni-app-x-SDK@12048-4.24/SDK/libs/`目录下的
-
-```console
-// android-gif-drawable-1.2.28.aar
-app-common-release.aar
-app-runtime-release.aar
-// breakpad-build-release.aar
-dcloud-layout-release.aar
-framework-release.aar
-uni-exit-release.aar
-uni-getAccessibilityInfo-release.aar
-uni-getAppAuthorizeSetting-release.aar
-uni-getAppBaseInfo-release.aar
-uni-getDeviceInfo-release.aar
-uni-getSystemInfo-release.aar
-uni-getSystemSetting-release.aar
-uni-openAppAuthorizeSetting-release.aar
-uni-prompt-release.aar
-uni-storage-release.aar
-uts-runtime-release.aar
-uni-rpx2px-release.aar
-uni-theme-release.aar
-```
-
-拷贝到`app/libs/`目录下，删除`utsplugin-release.aar`
-
-点击`File -> Sync Project With Gradle Files`
-
-### 4.3. `uniappx-test`工程配置
-
-1. 创建模块
-
-分别点击: File -> New -> New Module... -> Android Library
-
-![SDK版本](./images/android-studio-new.png)
-
-::: info 选项信息
-Module Name: uniappx-test
-
-Package Name: com.example.uniappx_test
-
-Language: Kotlin
-
-Bytecode Level: 8
-
-Minimum SDK: 21
-
-Build configuration language: Groovy DSL(build.gradle)
-:::
-
->`Package Name`要跟开发者中心的包名一致
-
->uniappx-test最低支持版本为21，Minimum SDK需要选择21及以上的版本
-
-2. 配置`build.gradle`基本信息
-
-修改uniappx-test模块下的build.gradle
-
-![build.gradle](./images/uniappx-test-gradle.png)
-
-```shell
-android {
-    ...
-    defaultConfig {
-        minSdk 21
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "consumer-rules.pro"
-
-        versionCode 1
-        versionName '1.0.0'
-        // noinspection ExpiredTargetSdkVersion
-        targetSdk 21
-    }
-    ...
-}
-
-repositories {
-    flatDir {
-        dirs 'libs'
-    }
-}
-
-dependencies {
-    compileOnly fileTree(dir: '../app/libs', include: ['*.aar'])
-...
-}
-```
-
-修改后点击`build.gradle`右上角的`Sync`
-
->注意：使用`noinspection ExpiredTargetSdkVersion`忽略Google Play的报错，创建虚拟机时，不要创建`Google APIs`的
->所有`Module`的`build.gradle`都要添加该注释
-
-### 4.4. 拷贝资源文件
+### 4.2. 拷贝资源文件
 
 1. 从`HBuilderX`拷贝静态资源到app主模块
 
-![拷贝静态资源](./images/upiappx-test-assets.png)
+![拷贝静态资源](./images/upiapp-assets.png)
 
->拷贝的文件夹要与`AndroidManifest.xml`中的`DCLOUD_UNI_APPID`的值保持一致
+### 4.3. 配置更新
 
-2. 从`HBuilderX`拷贝`kotlin`代码到`uniappx-test`模块下
-
-![拷贝kotlin代码](./images/uniappx-test-kt.png)
-
->注意：不要破环java下原有目录结构
-
-### 4.5. `app主模块`依赖更新
-
-* 将`uniappx-test`添加到`app主模块`依赖
+1. `/Translate-App/app/src/main/Androidmanifest.xml`
 
 ```console
-dependencies {
-    ...
-    implementation project(':uniappx-test')
-    ...
-}
+<meta-data android:name="dcloud_appkey" android:value="b1bf***1b89" />
 ```
 
-### 4.6. 打包apk
+2. `/Translate-App/app/src/main/res/values/strings.xml`
 
-1. app主模块`build.gradle`
+```console
+<resources>
+    <string name="app_name">Translate-App</string>
+</resources>
+```
 
-从开发者中心下载证书，获取相关信息，保存到项目根目录
+3. `/Translate-App/app/src/main/assets/data/dcloud_control.xml`
+
+生成自定义基座，需要在根节点下添加debug="true"和syncDebug="true"
+
+```console
+<hbuilder debug="true" syncDebug="true">
+<apps>
+    <app appid="__UNI__D44D05C" appver="1.0.0"/>
+</apps>
+</hbuilder>
+```
+
+4. `/Translate-App/app/build.gradle`
+
+从开发者中心下载证书，放到 `/Translate-App/app/`目录下
 
 ```console
 android {
     ...
     defaultConfig {
-        applicationId "com.example.uniappx_test"
+        applicationId "com.jasvtfvan.translate"
         ...
     }
 
     signingConfigs {
         config {
-            keyAlias '__uni__d2ff1d0'
+            keyAlias '__uni__d44d05c'
             keyPassword '开发者中心证书详情里拿到'
-            storeFile file('../__UNI__D2FF1D0.keystore')
+            storeFile file('__UNI__D44D05C.keystore')
             storePassword '同keyPassword'
-            v1SigningEnabled true //兼容v1
-            v2SigningEnabled true //兼容v2
+            v1SigningEnabled true
+            v2SigningEnabled true
         }
     }
 
@@ -399,30 +310,15 @@ android {
 }
 ```
 
-2. app主模块`Androidmanifest.xml`
+### 4.4. 打包apk
 
-```console
-<meta-data android:name="DCLOUD_UNI_APPID" android:value="__UNI__D2FF1D0" />
-<meta-data android:name="dcloud_appkey" android:value="开发者中心的离线打包key" />
-```
-
-3. app主模块`dcloud_control.xml`
-
-```console
-<hbuilder>
-<apps>
-    <app appid="__UNI__D2FF1D0" appver=""/>
-</apps>
-</hbuilder>
-```
-
-4. studio打包
+1. studio打包
 
 `Build` -> `Generate Signed App Bundle / APK` -> `APK` -> 下图 -> Next -> Release
 
-![keystore](./images/android-studio-keystore.png)
+![keystore](./images/android-studio-build.png)
 
-5. 打包后apk所在路径
+2. 打包后apk所在路径
 
 `/app/release/app-release.apk`
 
