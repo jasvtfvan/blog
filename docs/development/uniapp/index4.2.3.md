@@ -360,17 +360,17 @@ sudo keytool -list -v -keystore java8.keystore
 
 ### 5.2. 选择发行
 
-![build-1](./images/HBuilderX-build-1.png)
+<!-- ![build-1](./images/HBuilderX-build-1.png) -->
 
 ### 5.3. 选择证书
 
 当前选择`自定义证书`，也可以选择`云证书`（在开发者中心查看）
 
-![build-2](./images/HBuilderX-build-2.png)
+<!-- ![build-2](./images/HBuilderX-build-2.png) -->
 
 ### 5.4. 下载`apk`
 
-![build-3](./images/HBuilderX-build-3.png)
+<!-- ![build-3](./images/HBuilderX-build-3.png) -->
 
 ## 6. 开发调试
 
