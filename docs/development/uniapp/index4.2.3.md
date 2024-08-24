@@ -398,6 +398,8 @@ android {
 
 ### 4.1. 生成`.keystore`
 
+>不推荐
+
 1. 查看`jdk`地址
 
 ```bash
@@ -432,17 +434,17 @@ sudo keytool -list -v -keystore java8.keystore
 
 ### 4.2. 选择发行
 
-<!-- ![build-1](./images/HBuilderX-build-1.png) -->
+![release](./images/HBuilderX-build-release.png)
 
-### 4.3. 选择证书
+### 4.3. 选择证书并打包
 
-当前选择`自定义证书`，也可以选择`云证书`（在开发者中心查看）
+当前选择`自定义证书`，也可以选择`云证书`（在开发者中心查看），然后点击右下角打包
 
-<!-- ![build-2](./images/HBuilderX-build-2.png) -->
+![upload](./images/HBuilderX-build-upload.png)
 
 ### 4.4. 下载`apk`
 
-<!-- ![build-3](./images/HBuilderX-build-3.png) -->
+![download](./images/HBuilderX-build-download.png)
 
 ## 5. 开发调试
 
