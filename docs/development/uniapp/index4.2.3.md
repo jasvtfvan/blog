@@ -12,70 +12,9 @@ Android Studio Koala | 2024.1.1 Patch 1
 
 官网参考: [https://nativesupport.dcloud.net.cn/AppDocs/usesdk/android.html](https://nativesupport.dcloud.net.cn/AppDocs/usesdk/android.html)
 
-## 1. java 环境切换
+## 1. HBuilderX 创建项目
 
-1. 安装不同版本`java`，具体步骤省略
-
-2. 查看`bash_profile`
-
-```bash
-cat ~/.bash_profile
-```
-
-```console
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-export PATH="/Users/jasvtfvan/Documents/FullStack/flutter/bin:$PATH"
-export PUB_HOSTED_URL=https://pub.flutter-io.cn
-export FLUTTER_STORAGE_BASE_UUL=https://storage.flutter-io.cn
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-export ANDROID_HOME=$HOME/Library/Android/sdk
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/tools/bin
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-export PATH=$PATH:$ANDROID_HOME/emulator
-
-export JMETER_HOME=/Users/jasvtfvan/Documents/PortableApplication/apache-jmeter-5.4
-export JAVA_8_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home
-export JAVA_17_HOME=/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home
-
-export PATH=$JAVA_HOME/bin:$PATH:.:$JMETER_HOME/bin:$PATH
-export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JMETER_HOME/lib/ext/ApacheJMeter_core.jar:$JMETER_HOME/lib/jorphan.jar
-
-alias jdk8='export JAVA_HOME=$JAVA_8_HOME'
-alias jdk17='export JAVA_HOME=$JAVA_17_HOME'
-
-export MAVEN_HOME=/Users/jasvtfvan/Documents/PortableApplication/apache-maven-3.8.5
-export PATH=$PATH:$MAVEN_HOME/bin
-
-export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
-
-alias open_proxy='export https_proxy=http://127.0.0.1:7897 http_proxy=http://127.0.0.1:7897 all_proxy=socks5://127.0.0.1:7897'
-alias close_proxy='unset http_proxy;unset https_proxy;unset all_proxy'
-alias test_proxy='curl -v google.com'
-```
-
->`.bash_profile`和`.zshrc`相关权限说明,参考`node/nvm`和`go/gvm`
-
-3. 查看`java`版本并切换至`java8`
-
-可以不必切换到`java8`
-
-```bash
-java -version
-jdk8
-```
-
-```console
-java version "1.8.0_181"
-Java(TM) SE Runtime Environment (build 1.8.0_181-b13)
-Java HotSpot(TM) 64-Bit Server VM (build 25.181-b13, mixed mode)
-```
-
-## 2. HBuilderX 创建项目
-
-### 2.1 下载安装
+### 1.1 下载安装
 
 官网地址: [https://www.dcloud.io/hbuilderx.html](https://www.dcloud.io/hbuilderx.html)
 
@@ -83,13 +22,13 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.181-b13, mixed mode)
 
 下载`4.2.3`版本
 
-### 2.2. 创建`uni-app`项目
+### 1.2. 创建`uni-app`项目
 
 ![创建项目](./images/HBuilderX-new-project.png)
 
 绑定开发者账户后，自动生成`Appid`，并在开发者中心可以查看
 
-### 2.3. 安装`uview-plus`UI库
+### 1.3. 安装`uview-plus`UI库
 
 官网地址: [https://uview-plus.jiangruyi.com/components/install.html](https://uview-plus.jiangruyi.com/components/install.html)
 
@@ -171,27 +110,27 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
 </template>
 ```
 
-### 2.4. 生成打包资源
+### 1.4. 生成打包资源
 
 ![build](./images/HBuilderX-build.png)
 
-## 3. 开发者中心
+## 2. 开发者中心
 
 官网地址: [https://dev.dcloud.net.cn](https://dev.dcloud.net.cn)
 
-### 3.1. 管理应用
+### 2.1. 管理应用
 
 分别点击: 应用管理 -> 我的应用 -> 应用名称
 
 ![应用名称](./images/dcloud-application.png)
 
-### 3.2. 创建云端证书
+### 2.2. 创建云端证书
 
 ![创建证书](./images/dcloud-certificate.png)
 
 点击`创建证书`，创建完成后，点击`证书详情` -> `查看证书密码` -> `下载证书`
 
-### 3.3. 生成离线打包key
+### 2.3. 生成离线打包key
 
 1. 新增
 
@@ -207,11 +146,27 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
 
 ![生成离线key](./images/dcloud-build-key2.png)
 
-## 4. 离线Android项目
+## 3. 离线Android项目
 
 官方文档: [https://nativesupport.dcloud.net.cn/AppDocs/usesdk/android.html](https://nativesupport.dcloud.net.cn/AppDocs/usesdk/android.html)
 
-### 4.1. 导入`Android Studio`
+::: tip 各版本
+`Gradle插件版本` classpath 'com.android.tools.build:gradle:4.1.1'
+
+`Gradle版本` distributionUrl=https\://services.gradle.org/distributions/gradle-6.5-all.zip
+
+`Gradle JDK` 1.8.0_422
+
+`Compile Sdk Version` 30
+
+`Build Tools Version` 30.0.3
+
+`Target SDK Version` 28
+
+`Min SDK Version` 21
+:::
+
+### 3.1. 导入`Android Studio`
 
 1. 下载地址: [https://nativesupport.dcloud.net.cn/AppDocs/download/android.html](https://nativesupport.dcloud.net.cn/AppDocs/download/android.html)
 
@@ -219,33 +174,27 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
 
 2. 复制项目，目录如下
 
-修改文件夹为`Translate-App`
-
 ![项目目录](./images/android-sdk-project.png)
 
-3. 修改`Android Studio` `Gradle JDK`版本为1.8
+3. 修改项目名称、文件夹名称、文件名称
+
+`Translate-App` `Translate-App.iml` `app` `app.iml`
+
+![项目名称](./images/folder-file-name.png)
+
+4. 修改`Android Studio` `Gradle JDK`版本为1.8
+
+* 注意需要`Android Studio`下载安装版本，在`Gradle JDK`下拉可以点击`download`
 
 ![SDK版本](./images/android-studio-sdk-version.png)
 
-4. 修改模块的`sdk`版本
-
-这里`compileSdk`要切换到最高版本，然后`Apply`
-
-![SDK版本](./images/android-studio-sdk1.png)
-
-![SDK版本](./images/android-studio-sdk2.png)
-
-5. 修改模块名称为`app`
-
-![app](./images/android-studio-app.png)
-
-### 4.2. 拷贝资源文件
+### 3.2. 拷贝资源文件
 
 1. 从`HBuilderX`拷贝静态资源到app主模块
 
 ![拷贝静态资源](./images/upiapp-assets.png)
 
-### 4.3. 配置更新
+### 3.3. 配置更新
 
 1. `/Translate-App/app/src/main/Androidmanifest.xml`
 
@@ -310,7 +259,7 @@ android {
 }
 ```
 
-### 4.4. 打包apk
+### 3.4. 打包apk
 
 1. studio打包
 
@@ -322,9 +271,9 @@ android {
 
 `/app/release/app-release.apk`
 
-## 5. HBuilderX 云打包
+## 4. HBuilderX 云打包
 
-### 5.1. 生成`.keystore`
+### 4.1. 生成`.keystore`
 
 1. 查看`jdk`地址
 
@@ -358,23 +307,23 @@ sudo keytool -genkey -alias AAAAAA -keyalg RSA -validity 36500 -keysize 1024 -ke
 sudo keytool -list -v -keystore java8.keystore
 ```
 
-### 5.2. 选择发行
+### 4.2. 选择发行
 
 <!-- ![build-1](./images/HBuilderX-build-1.png) -->
 
-### 5.3. 选择证书
+### 4.3. 选择证书
 
 当前选择`自定义证书`，也可以选择`云证书`（在开发者中心查看）
 
 <!-- ![build-2](./images/HBuilderX-build-2.png) -->
 
-### 5.4. 下载`apk`
+### 4.4. 下载`apk`
 
 <!-- ![build-3](./images/HBuilderX-build-3.png) -->
 
-## 6. 开发调试
+## 5. 开发调试
 
-### 6.1. HBuilderX 真机调试
+### 5.1. HBuilderX 真机调试
 
 * `android掌上学习机`(android5.1.1)
 
@@ -403,6 +352,6 @@ echo 0x12d1 >> ~/.android/adb_usb.ini
 
 5. 重启adb（HBuilderX）
 
-### 6.2. HBuilderX引入原生插件
+### 5.2. HBuilderX引入原生插件
 
 1. 配置依赖

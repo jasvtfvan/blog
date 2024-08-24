@@ -12,7 +12,7 @@ Android Studio Koala | 2024.1.1 Patch 1
 
 官网参考: [https://doc.dcloud.net.cn/uni-app-x/native/use/android.html](https://doc.dcloud.net.cn/uni-app-x/native/use/android.html)
 
-## 1. java 环境切换
+## 1. java 环境切换（废弃）
 
 1. 安装不同版本`java`，具体步骤省略
 
