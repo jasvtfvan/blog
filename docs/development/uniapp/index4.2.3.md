@@ -14,7 +14,9 @@ Android Studio Koala | 2024.1.1 Patch 1
 
 ## 1. HBuilderX 创建项目
 
-### 1.1 下载安装
+### 1.1 下载安装 HBuilderX
+
+1. 软件下载安装
 
 官网地址: [https://www.dcloud.io/hbuilderx.html](https://www.dcloud.io/hbuilderx.html)
 
@@ -22,25 +24,33 @@ Android Studio Koala | 2024.1.1 Patch 1
 
 下载`4.2.3`版本
 
-### 1.2. 创建`uni-app`项目
+2. 安装`scss/sass编译`插件
+
+插件市场地址: [https://ext.dcloud.net.cn/plugin?id=2046](https://ext.dcloud.net.cn/plugin?id=2046)
+
+### 1.2. `vue3`项目（不推荐）
+
+::: danger 注意
+部分`IOT`国内芯片只支持`android5.0`，不支持`vue3`
+
+可能报错**WebView version is too low**
+:::
+
+1. 创建项目
 
 ![创建项目](./images/HBuilderX-new-project.png)
 
 绑定开发者账户后，自动生成`Appid`，并在开发者中心可以查看
 
-### 1.3. 安装`uview-plus`UI库
+2. 安装`uview-plus`UI库
 
 官网地址: [https://uview-plus.jiangruyi.com/components/install.html](https://uview-plus.jiangruyi.com/components/install.html)
 
-* 这里使用`npm`方式安装
-
 参考地址: [https://uview-plus.jiangruyi.com/components/npmSetting.html](https://uview-plus.jiangruyi.com/components/npmSetting.html)
 
-1. HBuilderX安装`scss/sass编译`插件
+* 这里使用`npm`方式安装
 
-插件市场地址: [https://ext.dcloud.net.cn/plugin?id=2046](https://ext.dcloud.net.cn/plugin?id=2046)
-
-2. 安装依赖
+* 安装依赖
 
 ![npm-install](./images/HBuilderX-npm-install.png)
 
@@ -50,7 +60,7 @@ npm install uview-plus
 npm install clipboard
 ```
 
-3. 修改`main.js`
+* 修改`main.js`
 
 ```js
 import uviewPlus from 'uview-plus'
@@ -67,14 +77,14 @@ export function createApp() {
 // #endif
 ```
 
-4. 修改`uni.scss`
+* 修改`uni.scss`
 
 ```js
 ...
 @import 'uview-plus/theme.scss';
 ```
 
-5. 修改`App.vue`
+* 修改`App.vue`
 
 ```scss
 <style lang="scss">
@@ -84,7 +94,7 @@ export function createApp() {
 </style>
 ```
 
-6. 修改`pages.json`
+* 修改`pages.json`
 
 ::: info 温馨提示
 uni-app为了调试性能的原因，修改easycom规则不会实时生效，配置完后，您需要重启HX或者重新编译项目才能正常使用uview-plus的功能。
@@ -92,7 +102,25 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
 请确保您的pages.json中只有一个easycom字段，否则请自行合并多个引入规则。
 :::
 
-7. 页面`demo`
+```console
+{
+	"easycom": {
+		"autoscan": true,
+		// 注意一定要放在custom里，否则无效，https://ask.dcloud.net.cn/question/131175
+		"custom": {
+			"^u--(.*)": "uview-plus/components/u-$1/u-$1.vue",
+			"^up-(.*)": "uview-plus/components/u-$1/u-$1.vue",
+			"^u-([^-].*)": "uview-plus/components/u-$1/u-$1.vue"
+		}
+	},
+	"pages": [
+        ...
+    ],
+    ...
+}
+```
+
+* 页面`demo`
 
 ```html
 <template>
@@ -106,6 +134,101 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
         <up-button type="primary" shape="circle" text="按钮形状"></up-button>
         <up-button text="渐变色按钮" color="linear-gradient(to right, rgb(66, 83, 216), rgb(213, 51, 186))"></up-button>
         <up-button type="primary" size="small" text="大小尺寸"></up-button>
+    </view>
+</template>
+```
+
+### 1.3. `vue2`项目（推荐）
+
+::: tip 注意
+部分`IOT`国内芯片只支持`android5.0`，需要使用`vue2`创建项目
+:::
+
+1. 创建项目
+
+效果图参考`vue3``Vue版本`选择2，`Appid`在开发者中心可以查看
+
+2. 安装`uview`UI库
+
+官网地址: [https://uviewui.com/](https://uviewui.com/)
+
+参考地址: [https://uviewui.com/components/npmSetting.html](https://uviewui.com/components/npmSetting.html)
+
+* 这里使用`npm`方式安装
+
+* 安装依赖
+
+![npm-install](./images/HBuilderX-npm-install.png)
+
+```shell
+npm i uview-ui
+```
+
+* 修改`main.js`
+
+```js
+import App from './App';
+import uView from "uview-ui";
+...
+Vue.use(uView);
+
+const app = new Vue({
+  ...App
+})
+app.$mount()
+...
+```
+
+* 修改`uni.scss`
+
+```js
+...
+@import 'uview-ui/theme.scss';
+```
+
+* 修改`App.vue`
+
+```scss
+<style lang="scss">
+	/* 注意要写在第一行，同时给style标签加入lang="scss"属性 */
+	@import "uview-ui/index.scss";
+	/*每个页面公共css */
+</style>
+```
+
+* 修改`pages.json`
+
+::: info 温馨提示
+uni-app为了调试性能的原因，修改easycom规则不会实时生效，配置完后，您需要重启HX或者重新编译项目才能正常使用uview-plus的功能。
+
+请确保您的pages.json中只有一个easycom字段，否则请自行合并多个引入规则。
+:::
+
+```console
+{
+	"easycom": {
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [
+        ...
+    ],
+    ...
+}
+```
+
+* 页面`demo`
+
+```html
+<template>
+    <view style="padding: 20px;">
+        <u-button type="primary" text="确定"></u-button>
+        <u-button type="primary" :plain="true" text="镂空"></u-button>
+        <u-button type="primary" :plain="true" :hairline="true" text="细边"></u-button>
+        <u-button type="primary" loading loadingText="加载中"></u-button>
+        <u-button type="primary" icon="map" text="图标按钮"></u-button>
+        <u-button type="primary" shape="circle" text="按钮形状"></u-button>
+        <u-button text="渐变色按钮" color="linear-gradient(to right, rgb(66, 83, 216), rgb(213, 51, 186))"></u-button>
+        <u-button type="primary" size="small" text="大小尺寸"></u-button>
     </view>
 </template>
 ```
