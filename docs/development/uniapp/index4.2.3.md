@@ -284,9 +284,13 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
 
 `Build Tools Version` 30.0.3
 
-`Target SDK Version` 28
+`Target SDK Version` 34
 
 `Min SDK Version` 21
+
+`Version Code` 100
+
+`Version Name` 1.0.0
 :::
 
 ### 3.1. 导入`Android Studio`
@@ -307,7 +311,7 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
 
 4. 修改`Android Studio` `Gradle JDK`版本为1.8
 
-* 注意需要`Android Studio`下载安装版本，在`Gradle JDK`下拉可以点击`download`
+* 注意需要`Android Studio`下载的安装版本，在`Gradle JDK`下拉可以点击`download`
 
 ![SDK版本](./images/android-studio-sdk-version.png)
 
@@ -485,4 +489,13 @@ echo 0x12d1 >> ~/.android/adb_usb.ini
 
 ### 5.2. HBuilderX引入原生插件
 
-1. 配置依赖
+::: tip 前提
+1. HBuilderX创建完成
+
+2. 开发者中心配置完成
+
+3. 离线android项目完成
+:::
+
+1. 
+
