@@ -518,3 +518,94 @@ dependencies {
     implementation 'androidx.webkit:webkit:1.3.0'
 }
 ```
+
+#### 5.2.2. android studio创建模块
+
+1. File -> New -> New Module... -> Android Library
+
+![Module](./images/android-studio-module.png)
+
+2. `/Translate-App/unipluginModule/build.gradle`
+
+```console
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 30
+
+    defaultConfig {
+//        namespace 'com.jasvtfvan.unipluginmodule'
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 100
+        versionName "1.0.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation fileTree(dir: '../app/libs', include: ['uniapp-v8-release.aar'])
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.facebook.fresco:fresco:2.5.0'
+    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'com.alibaba:fastjson:1.2.83'
+
+    /*
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    */
+}
+```
+
+>如果遇到build.gradle配置文件报错，即配置选项与gradle版本不匹配，可以去官网查询对应版本的配置，或者通过二分法逐行注释重试
+
+>`/Translate-App/gradle/gradle-wrapper.properties`查看gradle版本号
+
+>`/Translate-App/build.gradle`查看gradle插件版本号
+
+>比如当前gradle版本为6.5，则根据6.5版本的配置，`namespace`是多余的选项
+
+3. `/Translate-App/unipluginModule/src/main/AndroidManifest.xml`
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.android.simple">
+
+</manifest>
+```
+
+4. 创建`MainModule.java`
+
+`/Translate-App/unipluginModule/src/main/java/com/jasvtfvan/unipluginmodule/MainModule.java`
+
