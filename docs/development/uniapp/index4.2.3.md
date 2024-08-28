@@ -398,7 +398,7 @@ android {
 
 `/app/release/app-release.apk`
 
-## 4. HBuilderX 云打包
+## 4. HBuilderX 云打包（不推荐）
 
 ### 4.1. 生成`.keystore`
 
@@ -541,7 +541,7 @@ dependencies {
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.android.simple">
+    package="com.jasvtfvan.unipluginmodule">
 
 </manifest>
 ```
@@ -650,7 +650,11 @@ dependencies {
 
 ### 5.2 HBuilderX
 
-* 配置文件参考官网: [https://nativesupport.dcloud.net.cn/NativePlugin/course/package.html](https://nativesupport.dcloud.net.cn/NativePlugin/course/package.html)
+* 配置文件参考官网:
+
+[https://nativesupport.dcloud.net.cn/NativePlugin/course/package.html](https://nativesupport.dcloud.net.cn/NativePlugin/course/package.html)
+
+[https://uniapp.dcloud.net.cn/plugin/native-plugin.html#requirenativeplugin](https://uniapp.dcloud.net.cn/plugin/native-plugin.html#requirenativeplugin)
 
 1. 创建插件目录和文件
 
@@ -667,11 +671,13 @@ dependencies {
 	"_dp_type": "nativeplugin",
 	"_dp_nativeplugin": {
 		"android": {
-			"plugins": [{
-				"type": "module",
-				"name": "unipluginModule",
-				"class": "com.jasvtfvan.unipluginmodule.MainModule"
-			}],
+			"plugins": [
+				{
+				  "type": "module",
+				  "name": "unipluginModule",
+				  "class": "com.jasvtfvan.unipluginmodule.MainModule"
+				}
+			],
 			"integrateType": "aar",
 			"minSdkVersion": 21
 		}
@@ -683,7 +689,112 @@ dependencies {
 
 ![choose-plugin](./images/HBuilderX-choose-plugin.png)
 
+4. 修改uniapp代码
 
+```html
+<template>
+	<view class="content">
+		<image class="logo" src="/static/logo.png"></image>
+		<view class="text-area">
+			<text class="title">{{title}}</text>
+		</view>
+		<view style="padding: 20px;">
+			<u-button type="primary" text="发送hello" @click="sendHello"></u-button>
+			<u-button type="primary" :plain="true" text="镂空"></u-button>
+			<u-button type="primary" :plain="true" :hairline="true" text="细边"></u-button>
+			<u-button type="primary" loading loadingText="加载中"></u-button>
+			<u-button type="primary" icon="map" text="图标按钮"></u-button>
+			<u-button type="primary" shape="circle" text="按钮形状"></u-button>
+			<u-button text="渐变色按钮" color="linear-gradient(to right, rgb(66, 83, 216), rgb(213, 51, 186))"></u-button>
+			<u-button type="primary" size="small" text="大小尺寸"></u-button>
+		</view>
+	</view>
+</template>
+```
+```js
+<script>
+	const nativePlugin = uni.requireNativePlugin("unipluginModule");
+	export default {
+		data() {
+			return {
+				title: 'Hello',
+			}
+		},
+		onReady(){
+			console.log('onReady');
+		},
+		onLoad() {
+			console.log('onLoad');
+		},
+		methods: {
+			sendHello(){
+				console.log(nativePlugin.sendString)
+				nativePlugin.sendString("hello",res=>{
+					this.title = res;
+				})
+			}
+		}
+	}
+</script>
+```
+```css
+<style>
+	.content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.logo {
+		height: 200rpx;
+		width: 200rpx;
+		margin-top: 200rpx;
+		margin-left: auto;
+		margin-right: auto;
+		margin-bottom: 50rpx;
+	}
+
+	.text-area {
+		display: flex;
+		justify-content: center;
+	}
+
+	.title {
+		font-size: 36rpx;
+		color: #8f8f94;
+	}
+</style>
+```
+
+5. 生成本地App打包资源，并拷贝到android studio中
+
+参考`3.2拷贝静态资源文件`
+
+6. 制定自定义调试基座（云打包）
+
+选中`translate-app-vue2`项目 -> 发行 -> 原生App云打包 -> 打自定义调试基座
+
+![selfbase](./images/HBuilderX-cloud-selfbase.png)
+
+### 5.3 Android Studio基座
+
+参考官网: 
+[https://ask.dcloud.net.cn/article/35482](https://ask.dcloud.net.cn/article/35482)
+
+1. Build -> Build App Bundle(s)/APK(s) -> Build APK(s)
+
+![build-debug](./images/android-studio-build-debug.png)
+
+2. 复制debug.apk
+
+`/Translate-App/app/build/outputs/apk/debug/app-debug.apk`
+
+3. 粘贴到HBuilderX并重命名为android_debug.apk
+
+`/translate-app-vue2/unpackage/debug/android_debug.apk`
+
+![android_debug_apk](./images/android_debug_apk.png)
 
 ## 6. 开发调试
 
@@ -703,7 +814,15 @@ Settings->System->Developer options->开启顶部总开关(On)->Debugging->开�
 
 手机设置->关于手机->版本号（连点2-7下开启开发者模式）
 
-手机设置->系统和更新->开发人员选项->开发人员选项/USB调试
+手机设置->系统和更新->开发人员选项->
+
+::: info 设置开关
+* **开启**：开发人员选项
+* **开启**：USB调试
+* **开启**：连接USB时总是弹出提示
+* 关闭：监控ADB安装应用
+* **开启**：“仅充电”模式下运行ADB调试
+:::
 
 2. MAC连接`android`设备，安装驱动助手（如：华为荣耀，安装手机助手）
 根据步骤一步步连接
@@ -720,4 +839,8 @@ echo 0x12d1 >> ~/.android/adb_usb.ini
 5. 重启adb（HBuilderX）
 
 6. HBuilderX
-选中项目->运行->运行到手机或模拟器->运行到Android App基座
+
+选中项目 -> 运行 -> 运行到手机或模拟器 -> 运行到Android App基座 ->
+
+* 无原生插件：`使用标准基座运行`
+* 有原生插件：`使用自定义调试基座运行`
