@@ -450,44 +450,7 @@ sudo keytool -list -v -keystore java8.keystore
 
 ![download](./images/HBuilderX-build-download.png)
 
-## 5. 开发调试
-
-### 5.1. HBuilderX 真机调试
-
-* `android掌上学习机`(android5.1.1)
-
-1. android手机
-Settings->System->Developer options->开启顶部总开关(On)->Debugging->开启USB debugging
-
-2. HBuilderX
-选中项目->运行->运行到手机或模拟器->运行到Android App基座
-
-* `华为手机`
-
-1. android手机
-
-手机设置->关于手机->版本号（连点2-7下开启开发者模式）
-
-手机设置->系统和更新->开发人员选项->开发人员选项/USB调试
-
-2. MAC连接`android`设备，安装驱动助手（如：华为荣耀，安装手机助手）
-根据步骤一步步连接
-
-3. MAC打开`关于本机`->`系统报告`->`硬件/USB`->`USB 3.1 总线`
-找到华为设备，复制`厂商ID`
-
-4. 打开MAC终端，输入命令
-
-```bash
-echo 0x12d1 >> ~/.android/adb_usb.ini
-```
-
-5. 重启adb（HBuilderX）
-
-6. HBuilderX
-选中项目->运行->运行到手机或模拟器->运行到Android App基座
-
-### 5.2. HBuilderX引入原生插件
+## 5. HBuilderX引入原生插件
 
 ::: tip 前提
 1. HBuilderX创建完成
@@ -497,35 +460,15 @@ echo 0x12d1 >> ~/.android/adb_usb.ini
 3. 离线android项目完成
 :::
 
-#### 5.2.1. android studio配置
+### 5.1 Android Studio
 
-1. `/Translate-App/app/build.gradle`
-
-```console
-...
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
-    implementation 'androidx.core:core:1.1.0'
-    implementation "androidx.fragment:fragment:1.1.0"
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.facebook.fresco:fresco:2.5.0'
-    implementation "com.facebook.fresco:animated-gif:2.5.0"
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
-    implementation 'com.alibaba:fastjson:1.2.83'
-    implementation 'androidx.webkit:webkit:1.3.0'
-}
-```
-
-#### 5.2.2. android studio创建模块
+#### 5.1.1. 创建模块
 
 1. File -> New -> New Module... -> Android Library
 
 ![Module](./images/android-studio-module.png)
 
-2. `/Translate-App/unipluginModule/build.gradle`
+2. 更新`/Translate-App/unipluginModule/build.gradle`
 
 ```console
 apply plugin: 'com.android.library'
@@ -570,20 +513,18 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation fileTree(dir: '../app/libs', include: ['uniapp-v8-release.aar'])
+    compileOnly fileTree(dir: '../app/libs', include: ['uniapp-v8-release.aar'])
 
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.facebook.fresco:fresco:2.5.0'
-    implementation 'com.google.android.material:material:1.10.0'
-    implementation 'com.alibaba:fastjson:1.2.83'
+    compileOnly 'androidx.appcompat:appcompat:1.1.0'
+    compileOnly 'androidx.legacy:legacy-support-v4:1.0.0'
+    compileOnly 'androidx.recyclerview:recyclerview:1.1.0'
+    compileOnly 'com.facebook.fresco:fresco:2.5.0'
+//    compileOnly 'com.google.android.material:material:1.10.0'
+    compileOnly 'com.alibaba:fastjson:1.2.83'
 
-    /*
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    */
 }
 ```
 
@@ -595,7 +536,7 @@ dependencies {
 
 >比如当前gradle版本为6.5，则根据6.5版本的配置，`namespace`是多余的选项
 
-3. `/Translate-App/unipluginModule/src/main/AndroidManifest.xml`
+3. 更新`/Translate-App/unipluginModule/src/main/AndroidManifest.xml`
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -605,7 +546,178 @@ dependencies {
 </manifest>
 ```
 
-4. 创建`MainModule.java`
+4. 创建`/Translate-App/unipluginModule/src/main/java/com/jasvtfvan/unipluginmodule/MainModule.java`
 
-`/Translate-App/unipluginModule/src/main/java/com/jasvtfvan/unipluginmodule/MainModule.java`
+```java
+package com.jasvtfvan.unipluginmodule;
 
+import org.json.JSONObject;
+
+import io.dcloud.feature.uniapp.annotation.UniJSMethod;
+import io.dcloud.feature.uniapp.bridge.UniJSCallback;
+import io.dcloud.feature.uniapp.common.UniModule;
+
+public class MainModule extends UniModule {
+
+    @UniJSMethod(uiThread = true)
+    public void sendJson(JSONObject srcJson, UniJSCallback callback) throws Exception {
+        if(callback != null) {
+            JSONObject result = new JSONObject();
+            result.put("code", 200);
+            result.put("message", "success");
+            result.put("data", srcJson);
+            callback.invoke(result);
+        }
+    }
+
+    @UniJSMethod(uiThread = true)
+    public void sendString(String srcString, UniJSCallback callback) throws Exception {
+        if (callback != null) {
+            JSONObject result = new JSONObject();
+            result.put("code", 200);
+            result.put("message", "success");
+            result.put("data", srcString);
+            callback.invoke(result);
+        }
+    }
+}
+```
+
+#### 5.1.2. 主模块配置
+
+1. 更新`/Translate-App/app/build.gradle`
+
+```js
+...
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+    implementation 'androidx.core:core:1.1.0'
+    implementation "androidx.fragment:fragment:1.1.0"
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.facebook.fresco:fresco:2.5.0'
+    implementation "com.facebook.fresco:animated-gif:2.5.0"
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'com.alibaba:fastjson:1.2.83'
+    implementation 'androidx.webkit:webkit:1.3.0'
+
+    implementation project(':unipluginModule')
+}
+```
+
+2. 创建`dcloud_uniplugins.json`
+
+`/Translate-App/app/src/main/assets/`
+
+```json
+{
+  "nativePlugins": [
+    {
+      "plugins": [
+        {
+          "type": "module",
+          "name": "unipluginModule",
+          "class": "com.jasvtfvan.unipluginmodule.MainModule"
+        }
+      ]
+    }
+  ]
+}
+```
+
+3. 更新`/Translate-App/app/proguard-rules.pro`
+
+```console
+...
+#-keep public class * extends io.dcloud.feature.uniapp.common.UniModule{*;}
+```
+
+#### 5.1.3. 生成aar文件
+
+1. 选择debug/release
+
+![select-build-variant](./images/android-studio-select-build-variant.png)
+
+2. 生成aar文件
+
+![build-module](./images/android-studio-build-module.png)
+
+3. 拷贝aar文件
+
+`/Translate-App/unipluginModule/build/outputs/aar/unipluginModule-release.aar`
+
+### 5.2 HBuilderX
+
+* 配置文件参考官网: [https://nativesupport.dcloud.net.cn/NativePlugin/course/package.html](https://nativesupport.dcloud.net.cn/NativePlugin/course/package.html)
+
+1. 创建插件目录和文件
+
+![folder](./images/HBuilderX-plugins-folder.png)
+
+2. `package.json`配置
+
+```json
+{
+	"name": "unipluginModule",
+	"id": "unipluginModule",
+	"version": "1.0.0",
+	"description": "通信1.0.0",
+	"_dp_type": "nativeplugin",
+	"_dp_nativeplugin": {
+		"android": {
+			"plugins": [{
+				"type": "module",
+				"name": "unipluginModule",
+				"class": "com.jasvtfvan.unipluginmodule.MainModule"
+			}],
+			"integrateType": "aar",
+			"minSdkVersion": 21
+		}
+	}
+}
+```
+
+3. 选择本地插件
+
+![choose-plugin](./images/HBuilderX-choose-plugin.png)
+
+
+
+## 6. 开发调试
+
+### 6.1. HBuilderX 真机调试
+
+* `android掌上学习机`(android5.1.1)
+
+1. android手机
+Settings->System->Developer options->开启顶部总开关(On)->Debugging->开启USB debugging
+
+2. HBuilderX
+选中项目->运行->运行到手机或模拟器->运行到Android App基座
+
+* `华为手机`
+
+1. android手机
+
+手机设置->关于手机->版本号（连点2-7下开启开发者模式）
+
+手机设置->系统和更新->开发人员选项->开发人员选项/USB调试
+
+2. MAC连接`android`设备，安装驱动助手（如：华为荣耀，安装手机助手）
+根据步骤一步步连接
+
+3. MAC打开`关于本机`->`系统报告`->`硬件/USB`->`USB 3.1 总线`
+找到华为设备，复制`厂商ID`
+
+4. 打开MAC终端，输入命令
+
+```bash
+echo 0x12d1 >> ~/.android/adb_usb.ini
+```
+
+5. 重启adb（HBuilderX）
+
+6. HBuilderX
+选中项目->运行->运行到手机或模拟器->运行到Android App基座
