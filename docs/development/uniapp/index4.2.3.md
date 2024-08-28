@@ -767,17 +767,19 @@ dependencies {
 </style>
 ```
 
-5. 生成本地App打包资源，并拷贝到android studio中
+::: tips 打包参考
+参考`3.2 3.3 3.4`
+:::
 
-参考`3.2拷贝静态资源文件`
+## 6. 开发调试
 
-6. 制定自定义调试基座（云打包）
+### 6.1. 制定自定义调试基座（云打包）
 
 选中`translate-app-vue2`项目 -> 发行 -> 原生App云打包 -> 打自定义调试基座
 
 ![selfbase](./images/HBuilderX-cloud-selfbase.png)
 
-### 5.3 Android Studio基座
+### 6.2 Android Studio基座
 
 参考官网: 
 [https://ask.dcloud.net.cn/article/35482](https://ask.dcloud.net.cn/article/35482)
@@ -796,9 +798,9 @@ dependencies {
 
 ![android_debug_apk](./images/android_debug_apk.png)
 
-## 6. 开发调试
+### 6.3. HBuilderX 真机调试
 
-### 6.1. HBuilderX 真机调试
+* 原生插件已经开发配置完毕，有助于调试业务代码
 
 * `android掌上学习机`(android5.1.1)
 
@@ -844,3 +846,8 @@ echo 0x12d1 >> ~/.android/adb_usb.ini
 
 * 无原生插件：`使用标准基座运行`
 * 有原生插件：`使用自定义调试基座运行`
+
+### 6.4. Android Studio 真机调试
+
+* 有助于调试原生插件
+
