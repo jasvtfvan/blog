@@ -315,6 +315,12 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
 
 ![SDK版本](./images/android-studio-sdk-version.png)
 
+5. 配置`Gradle`
+
+![Gradle](./images/android-studio-open-gradle.png)
+
+![Gradle](./images/android-studio-config-gradle.png)
+
 ### 3.2. 拷贝资源文件
 
 1. 从`HBuilderX`拷贝静态资源到app主模块
@@ -354,13 +360,23 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
 从开发者中心下载证书，放到 `/Translate-App/app/`目录下
 
 ```console
-android {
-    ...
-    defaultConfig {
-        applicationId "com.jasvtfvan.translate"
-        ...
-    }
+apply plugin: 'com.android.application'
 
+android {
+    compileSdkVersion 30
+    buildToolsVersion '30.0.3'
+    defaultConfig {
+        applicationId 'com.jasvtfvan.translation'
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 100
+        versionName "1.0.0"
+        multiDexEnabled true
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+    }
     signingConfigs {
         config {
             keyAlias '__uni__d44d05c'
@@ -373,16 +389,38 @@ android {
     }
 
     buildTypes {
-            debug {
-                signingConfig signingConfigs.config
-                ...
-            }
-            release {
-                signingConfig signingConfigs.config
-                ...
-            }
+        debug {
+            signingConfig signingConfigs.config
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            signingConfig signingConfigs.config
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
-    ...
+    aaptOptions {
+        additionalParameters '--auto-add-overlay'
+        ignoreAssetsPattern "!.svn:!.git:.*:!CVS:!thumbs.db:!picasa.ini:!*.scc:*~"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.core:core:1.1.0'
+    implementation "androidx.fragment:fragment:1.1.0"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.webkit:webkit:1.3.0'
+    implementation 'com.alibaba:fastjson:1.2.83'
+    implementation 'com.facebook.fresco:fresco:2.5.0'
+    implementation "com.facebook.fresco:animated-gif:2.5.0"
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+
+    implementation project(':mylibrary')
 }
 ```
 
@@ -468,16 +506,18 @@ sudo keytool -list -v -keystore java8.keystore
 
 ![Module](./images/android-studio-module.png)
 
-2. 更新`/Translate-App/unipluginModule/build.gradle`
+2. 更新`/Translate-App/mylibrary/build.gradle`
 
 ```console
-apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+}
 
 android {
+//    namespace 'com.jasvtfvan.plugin_module'
     compileSdkVersion 30
 
     defaultConfig {
-//        namespace 'com.jasvtfvan.unipluginmodule'
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 100
@@ -485,11 +525,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
-
-        compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_8
-            targetCompatibility JavaVersion.VERSION_1_8
-        }
     }
 
     buildTypes {
@@ -502,6 +537,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 repositories {
@@ -509,18 +548,19 @@ repositories {
         dirs 'libs'
     }
 }
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    compileOnly fileTree(dir: '../app/libs', include: ['uniapp-v8-release.aar'])
-
     compileOnly 'androidx.appcompat:appcompat:1.1.0'
+    compileOnly 'androidx.core:core:1.1.0'
+    compileOnly 'androidx.fragment:fragment:1.1.0'
     compileOnly 'androidx.legacy:legacy-support-v4:1.0.0'
+    compileOnly 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     compileOnly 'androidx.recyclerview:recyclerview:1.1.0'
+    compileOnly 'com.alibaba:fastjson:1.2.83'
     compileOnly 'com.facebook.fresco:fresco:2.5.0'
 //    compileOnly 'com.google.android.material:material:1.10.0'
-    compileOnly 'com.alibaba:fastjson:1.2.83'
+
+    compileOnly fileTree(include: ['uniapp-v8-release.aar'], dir: '../app/libs')
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -536,20 +576,29 @@ dependencies {
 
 >比如当前gradle版本为6.5，则根据6.5版本的配置，`namespace`是多余的选项
 
-3. 更新`/Translate-App/unipluginModule/src/main/AndroidManifest.xml`
+3. 更新`/Translate-App/mylibrary/src/main/AndroidManifest.xml`
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jasvtfvan.unipluginmodule">
+    package="com.jasvtfvan.plugin_module">
 
 </manifest>
 ```
 
-4. 创建`/Translate-App/unipluginModule/src/main/java/com/jasvtfvan/unipluginmodule/MainModule.java`
+4. 更新`/Translate-App/mylibrary/proguard-rules.pro`
+
+```console
+# ...
+-keep public class * extends io.dcloud.feature.uniapp.common.UniModule{*;}
+```
+
+5. 创建`/Translate-App/mylibrary/src/main/java/com/jasvtfvan/plugin_module/TestModule.java`
 
 ```java
-package com.jasvtfvan.unipluginmodule;
+package com.jasvtfvan.plugin_module;
+
+import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -557,59 +606,66 @@ import io.dcloud.feature.uniapp.annotation.UniJSMethod;
 import io.dcloud.feature.uniapp.bridge.UniJSCallback;
 import io.dcloud.feature.uniapp.common.UniModule;
 
-public class MainModule extends UniModule {
+public class TestModule extends UniModule {
 
+    String TAG = "MainModule";
+
+    //run ui thread
     @UniJSMethod(uiThread = true)
-    public void sendJson(JSONObject srcJson, UniJSCallback callback) throws Exception {
+    public void testAsyncFunc(JSONObject options, UniJSCallback callback) throws Exception {
+        Log.e(TAG, "testAsyncFunc--"+options);
         if(callback != null) {
-            JSONObject result = new JSONObject();
-            result.put("code", 200);
-            result.put("message", "success");
-            result.put("data", srcJson);
-            callback.invoke(result);
+            JSONObject data = new JSONObject();
+            data.put("code", "success");
+            callback.invoke(data);
         }
     }
 
-    @UniJSMethod(uiThread = true)
-    public void sendString(String srcString, UniJSCallback callback) throws Exception {
-        if (callback != null) {
-            JSONObject result = new JSONObject();
-            result.put("code", 200);
-            result.put("message", "success");
-            result.put("data", srcString);
-            callback.invoke(result);
-        }
+    //run JS thread
+    @UniJSMethod (uiThread = false)
+    public JSONObject testSyncFunc() throws Exception{
+        JSONObject data = new JSONObject();
+        data.put("code", "success");
+        return data;
     }
+
 }
 ```
 
 #### 5.1.2. 主模块配置
 
-1. 更新`/Translate-App/app/build.gradle`
+1. `/Translate-App/settings.gradle`
+
+```js
+include ':app'
+include ':mylibrary'
+```
+
+2. 更新`/Translate-App/app/build.gradle`
 
 ```js
 ...
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     implementation 'androidx.core:core:1.1.0'
     implementation "androidx.fragment:fragment:1.1.0"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.webkit:webkit:1.3.0'
+    implementation 'com.alibaba:fastjson:1.2.83'
     implementation 'com.facebook.fresco:fresco:2.5.0'
     implementation "com.facebook.fresco:animated-gif:2.5.0"
     implementation 'com.github.bumptech.glide:glide:4.9.0'
-    implementation 'com.alibaba:fastjson:1.2.83'
-    implementation 'androidx.webkit:webkit:1.3.0'
 
-    implementation project(':unipluginModule')
+    implementation project(':mylibrary')
 }
 ```
 
-2. 创建`dcloud_uniplugins.json`
+3. 创建`dcloud_uniplugins.json`
 
-`/Translate-App/app/src/main/assets/`
+`/Translate-App/app/src/main/assets/dcloud_uniplugins.json`
 
 ```json
 {
@@ -618,8 +674,8 @@ dependencies {
       "plugins": [
         {
           "type": "module",
-          "name": "unipluginModule",
-          "class": "com.jasvtfvan.unipluginmodule.MainModule"
+          "name": "TestModule",
+          "class": "com.jasvtfvan.plugin_module.TestModule"
         }
       ]
     }
@@ -627,26 +683,17 @@ dependencies {
 }
 ```
 
-3. 更新`/Translate-App/app/proguard-rules.pro`
+#### 5.1.3. 插件打包
 
-```console
-...
-#-keep public class * extends io.dcloud.feature.uniapp.common.UniModule{*;}
-```
+1. 利用`Gradle`打包
 
-#### 5.1.3. 生成aar文件
+`Android Studio`侧边栏`Gradle` -> `Translate-App` -> `Tasks` -> `other` -> `assembleRelease`
 
-1. 选择debug/release
+![assembleRelease](./images/android-studio-assembleRelease.png)
 
-![select-build-variant](./images/android-studio-select-build-variant.png)
+2. 拷贝aar文件
 
-2. 生成aar文件
-
-![build-module](./images/android-studio-build-module.png)
-
-3. 拷贝aar文件
-
-`/Translate-App/unipluginModule/build/outputs/aar/unipluginModule-release.aar`
+`/Translate-App/mylibrary/build/outputs/aar/mylibrary-release.aar`
 
 ### 5.2 HBuilderX
 
@@ -658,32 +705,37 @@ dependencies {
 
 1. 创建插件目录和文件
 
+`/translate-app-vue2/nativeplugins/TestModule/android/`
+
+`/translate-app-vue2/nativeplugins/TestModule/package.json`
+
 ![folder](./images/HBuilderX-plugins-folder.png)
 
 2. `package.json`配置
 
 ```json
 {
-	"name": "unipluginModule",
-	"id": "unipluginModule",
+	"name": "TestModule",
+	"id": "TestModule",
 	"version": "1.0.0",
-	"description": "通信1.0.0",
-	"_dp_type": "nativeplugin",
-	"_dp_nativeplugin": {
+	"description": "测试插件描述信息",
+	"_dp_type":"nativeplugin",
+	"_dp_nativeplugin":{
 		"android": {
+			"integrateType":"aar",
 			"plugins": [
 				{
-				  "type": "module",
-				  "name": "unipluginModule",
-				  "class": "com.jasvtfvan.unipluginmodule.MainModule"
+					"type": "module",
+					"name": "TestModule",
+					"class": "com.jasvtfvan.plugin_module.TestModule"
 				}
-			],
-			"integrateType": "aar",
-			"minSdkVersion": 21
+			]
 		}
 	}
 }
 ```
+
+2. 拷贝`mylibrary-release.aar`到`/translate-app-vue2/nativeplugins/TestModule/android/`
 
 3. 选择本地插件
 
@@ -699,71 +751,79 @@ dependencies {
 			<text class="title">{{title}}</text>
 		</view>
 		<view style="padding: 20px;">
-			<u-button type="primary" text="发送hello" @click="sendHello"></u-button>
-			<u-button type="primary" :plain="true" text="镂空"></u-button>
-			<u-button type="primary" :plain="true" :hairline="true" text="细边"></u-button>
-			<u-button type="primary" loading loadingText="加载中"></u-button>
-			<u-button type="primary" icon="map" text="图标按钮"></u-button>
-			<u-button type="primary" shape="circle" text="按钮形状"></u-button>
-			<u-button text="渐变色按钮" color="linear-gradient(to right, rgb(66, 83, 216), rgb(213, 51, 186))"></u-button>
-			<u-button type="primary" size="small" text="大小尺寸"></u-button>
+			<button type="primary" @click="testAsyncFunc">testAsyncFunc</button>
+			<br>
+			<button type="primary" @click="testSyncFunc">testSyncFunc</button>
+			<br>
+			<u-button type="primary" text="默认"></u-button>
 		</view>
 	</view>
 </template>
 ```
+
 ```js
 <script>
-	const nativePlugin = uni.requireNativePlugin("unipluginModule");
-	export default {
-		data() {
-			return {
-				title: 'Hello',
-			}
-		},
-		onReady(){
-			console.log('onReady');
-		},
-		onLoad() {
-			console.log('onLoad');
-		},
-		methods: {
-			sendHello(){
-				console.log(nativePlugin.sendString)
-				nativePlugin.sendString("hello",res=>{
-					this.title = res;
-				})
-			}
+var testModule = uni.requireNativePlugin("TestModule");
+
+export default {
+	data() {
+		return {
+			title: 'TitleInit',
 		}
+	},
+	onLoad() {
+	},
+	methods: {
+		testAsyncFunc() {
+			console.log(testModule);
+			// 调用异步方法
+			testModule.testAsyncFunc({
+				'name': 'unimp',
+				'age': 1
+			}, (e) => {
+				console.log(e);
+				uni.showToast({
+					title: JSON.stringify(e),
+					icon:'none'
+				});
+			});
+		},
+		testSyncFunc() {
+			console.log(testModule);
+			// 调用同步方法
+			const ret = testModule.testSyncFunc();
+			console.log(ret);
+			this.title = ret || 'testSyncFail';
+		},
 	}
+}
 </script>
 ```
+
 ```css
-<style>
-	.content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin-top: 200rpx;
-		margin-left: auto;
-		margin-right: auto;
-		margin-bottom: 50rpx;
-	}
-
-	.text-area {
-		display: flex;
-		justify-content: center;
-	}
-
-	.title {
-		font-size: 36rpx;
-		color: #8f8f94;
-	}
+<style lang="scss" scoped>
+.content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.logo {
+	height: 200rpx;
+	width: 200rpx;
+	margin-top: 200rpx;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 50rpx;
+}
+.text-area {
+	display: flex;
+	justify-content: center;
+}
+.title {
+	font-size: 36rpx;
+	color: #8f8f94;
+}
 </style>
 ```
 
@@ -783,7 +843,7 @@ dependencies {
 
 ![selfbase](./images/HBuilderX-cloud-selfbase.png)
 
-### 6.2 Android Studio基座
+### 6.2 Android Studio基座（离线包）
 
 参考官网: 
 [https://ask.dcloud.net.cn/article/35482](https://ask.dcloud.net.cn/article/35482)
