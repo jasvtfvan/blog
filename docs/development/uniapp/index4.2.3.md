@@ -138,6 +138,12 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
 </template>
 ```
 
+3. 修改`manifest.json`
+
+![manifest-basic](./images/HBuilder-manifest-basic.png)
+
+![manifest-common](./images/HBuilder-manifest-common.png)
+
 ### 1.3. `vue2`项目（推荐）
 
 ::: tip 注意
@@ -233,9 +239,11 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
 </template>
 ```
 
-### 1.4. 生成打包资源
+3. 修改`manifest.json`
 
-![build](./images/HBuilderX-build.png)
+![manifest-basic](./images/HBuilder-manifest-basic.png)
+
+![manifest-common](./images/HBuilder-manifest-common.png)
 
 ## 2. 开发者中心
 
@@ -265,9 +273,15 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
 
 ![生成离线key](./images/dcloud-build-key1.png)
 
-3. 查看
+3. 查看离线打包key（**dcloud_appkey**）
 
 ![生成离线key](./images/dcloud-build-key2.png)
+
+::: tip 包名/appid/域名
+release版本:     com.jasvtfvan.release
+
+debug版本:       com.jasvtfvan.debug	
+:::
 
 ## 3. 离线Android项目
 
@@ -323,9 +337,13 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
 
 ### 3.2. 拷贝资源文件
 
-1. 从`HBuilderX`拷贝静态资源到app主模块
+1. 生成打包资源
 
-![拷贝静态资源](./images/upiapp-assets.png)
+![build](./images/HBuilderX-build.png)
+
+2. 从`HBuilderX`拷贝静态资源到app主模块
+
+![拷贝静态资源](./images/upiapp-copy-assets.png)
 
 ### 3.3. 配置更新
 
@@ -334,10 +352,22 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
 ```console
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jasvtfvan.translation">
+    package="com.jasvtfvan.debug">
 ...
-<meta-data android:name="dcloud_appkey" android:value="b1bf***1b89" />
+<meta-data android:name="dcloud_appkey" android:value="0737***离线打包key***79f7" />
 ```
+
+::: danger 注意
+```console
+正式版使用【com.jasvtfvan.release】
+自定义基座调试/测试版本使用【com.jasvtfvan.debug】
+```
+---
+```console
+正式版使用`release`版的【离线打包key】
+自定义基座调试/测试版使用`debug`版的【离线打包key】
+```
+:::
 
 2. `/Translate-App/app/src/main/res/values/strings.xml`
 
@@ -354,7 +384,7 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
 ```console
 <hbuilder debug="true" syncDebug="true">
 <apps>
-    <app appid="__UNI__D44D05C" appver="1.0.0"/>
+    <app appid="__UNI__98B8B53" appver="1.0.0"/>
 </apps>
 </hbuilder>
 ```
@@ -370,12 +400,15 @@ android {
     compileSdkVersion 30
     buildToolsVersion '30.0.3'
     defaultConfig {
-        applicationId 'com.jasvtfvan.translation'
+        applicationId 'com.jasvtfvan.debug'
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 100
         versionName "1.0.0"
         multiDexEnabled true
+        ndk {
+            abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_8
             targetCompatibility JavaVersion.VERSION_1_8
@@ -383,9 +416,9 @@ android {
     }
     signingConfigs {
         config {
-            keyAlias '__uni__d44d05c'
+            keyAlias '__uni__98B8B53'
             keyPassword '开发者中心证书详情里拿到'
-            storeFile file('__UNI__D44D05C.keystore')
+            storeFile file('__UNI__98B8B53.keystore')
             storePassword '同keyPassword'
             v1SigningEnabled true
             v2SigningEnabled true
@@ -428,83 +461,18 @@ dependencies {
 }
 ```
 
-### 3.4. 打包apk
-
-1. studio打包
-
-`Build` -> `Generate Signed App Bundle / APK` -> `APK` -> 下图 -> Next -> Release
-
-![keystore](./images/android-studio-build.png)
-
-2. 打包后apk所在路径
-
-`/app/release/app-release.apk`
-
-## 4. HBuilderX 云打包（不推荐）
-
-### 4.1. 生成`.keystore`
-
->不推荐
-
-1. 查看`jdk`地址
-
-```bash
-/usr/libexec/java_home -V
-```
-
+::: danger 【applicationId】取值
 ```console
-Matching Java Virtual Machines (3):
-    17.0.10 (x86_64) "Oracle Corporation" - "Java SE 17.0.10" /Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home
-    1.8.181.13 (x86_64) "Oracle Corporation" - "Java" /Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home
-    1.8.0_181 (x86_64) "Oracle Corporation" - "Java SE 8" /Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home
-/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home
+正式版使用【com.jasvtfvan.release】
+自定义基座调试/测试版本使用【com.jasvtfvan.debug】
 ```
-
-2. 进入`JDK`所在目录
-
-```bash
-cd /Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home
-```
-
-3. 输入命令生成`.keystore`
-
-```bash
-sudo keytool -genkey -alias AAAAAA -keyalg RSA -validity 36500 -keysize 1024 -keystore java8.keystore -v
-```
-
-查看密钥信息(123456)
-
-```bash
-sudo keytool -list -v -keystore java8.keystore
-```
-
-### 4.2. 选择发行
-
-![release](./images/HBuilderX-build-release.png)
-
-### 4.3. 选择证书并打包
-
-当前选择`自定义证书`，也可以选择`云证书`（在开发者中心查看），然后点击右下角打包
-
-![upload](./images/HBuilderX-build-upload.png)
-
-### 4.4. 下载`apk`
-
-![download](./images/HBuilderX-build-download.png)
-
-## 5. HBuilderX引入原生插件
-
-::: tip 前提
-1. HBuilderX创建完成
-
-2. 开发者中心配置完成
-
-3. 离线android项目完成
 :::
 
-### 5.1 Android Studio
+## 4. 原生插件
 
-#### 5.1.1. 创建模块
+### 4.1 Android Studio
+
+#### 4.1.1. 创建模块
 
 1. File -> New -> New Module... -> Android Library
 
@@ -513,9 +481,7 @@ sudo keytool -list -v -keystore java8.keystore
 2. 更新`/Translate-App/mylibrary/build.gradle`
 
 ```console
-plugins {
-    id 'com.android.library'
-}
+apply plugin: 'com.android.library'
 
 android {
 //    namespace 'com.jasvtfvan.plugin_module'
@@ -526,7 +492,6 @@ android {
         targetSdkVersion 28
         versionCode 100
         versionName "1.0.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
@@ -612,31 +577,36 @@ import io.dcloud.feature.uniapp.common.UniModule;
 
 public class TestModule extends UniModule {
 
-    String TAG = "MainModule";
+    String TAG = "TestModule";
 
     //run ui thread
     @UniJSMethod(uiThread = true)
-    public void testAsyncFunc(JSONObject options, UniJSCallback callback) throws Exception {
-        Log.e(TAG, "testAsyncFunc--"+options);
-        if(callback != null) {
-            JSONObject data = new JSONObject();
-            data.put("code", "success");
-            callback.invoke(data);
+    public void testAsyncFunc(String param, UniJSCallback callback) {
+        try {
+            JSONObject data = new JSONObject(param);
+            Log.e(TAG, "testAsyncFunc--:"+data);
+            if(callback != null) {
+                data.put("code", "success");
+                callback.invoke(data.toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     //run JS thread
     @UniJSMethod (uiThread = false)
-    public JSONObject testSyncFunc() throws Exception{
+    public String testSyncFunc(String param) throws Exception{
+        Log.e(TAG, "testSyncFunc--"+param);
         JSONObject data = new JSONObject();
         data.put("code", "success");
-        return data;
+        return data.toString();
     }
 
 }
 ```
 
-#### 5.1.2. 主模块配置
+#### 4.1.2. 主模块配置
 
 1. `/Translate-App/settings.gradle`
 
@@ -687,25 +657,30 @@ dependencies {
 }
 ```
 
-#### 5.1.3. 插件打包
+#### 4.1.3. 插件打包
 
 1. 利用`Gradle`打包
 
-`Android Studio`侧边栏`Gradle` -> `Translate-App` -> `Tasks` -> `other` -> `assembleRelease`
+`Android Studio`侧边栏`Gradle` -> `Translate-App` -> `Tasks` -> `other` -> `assembleDebug`
 
 ![assembleRelease](./images/android-studio-assembleRelease.png)
 
-2. 拷贝aar文件
+::: danger assembleDebug/assembleRelease
+```console
+正式版点击【assembleRelease】
+自定义基座调试/测试版本点击【assembleDebug】
+```
+:::
 
-`/Translate-App/mylibrary/build/outputs/aar/mylibrary-release.aar`
+2. 拷贝`mylibrary-release.aar`或`mylibrary-debug.aar`文件，路径在
 
-### 5.2 HBuilderX
+`/Translate-App/mylibrary/build/outputs/aar/`
+
+### 4.2 HBuilderX
 
 * 配置文件参考官网:
 
 [https://nativesupport.dcloud.net.cn/NativePlugin/course/package.html](https://nativesupport.dcloud.net.cn/NativePlugin/course/package.html)
-
-[https://uniapp.dcloud.net.cn/plugin/native-plugin.html#requirenativeplugin](https://uniapp.dcloud.net.cn/plugin/native-plugin.html#requirenativeplugin)
 
 1. 创建插件目录和文件
 
@@ -740,13 +715,28 @@ dependencies {
 }
 ```
 
-2. 拷贝`mylibrary-release.aar`到`/translate-app-vue2/nativeplugins/TestModule/android/`
+3. 粘贴`mylibrary-debug.aar`或`mylibrary-release.aar`
 
-3. 选择本地插件
+![folder-struct](./images/HBuilderX-plugins-folder-struct.png)
+
+::: tip 结构说明
+```md{4,5,7}
+├─ TestModule                   ---> 插件id命名的文件夹
+│  ├─ android                   ---> 安卓插件目录
+│  │  ├─ libs                   ---> libs目录
+│  │  │  ├─ some.jar            ---> 依赖的jar（当前不存在）
+│  │  │  └─ lib-some.so         ---> 依赖的so文件（当前项目不存在）
+│  │  ├─ mylibrary-debug.aar  ---> 插件aar
+│  │  └─ some.aar               ---> 基础依赖的aar（当前项目不存在）
+│  └─ package.json              ---> 配置文件
+```
+:::
+
+4. 选择本地插件
 
 ![choose-plugin](./images/HBuilderX-choose-plugin.png)
 
-4. 修改uniapp代码
+5. 修改uniapp代码
 
 ```html
 <template>
@@ -768,7 +758,7 @@ dependencies {
 
 ```js
 <script>
-var testModule = uni.requireNativePlugin("TestModule");
+const testModule = uni.requireNativePlugin("TestModule");
 
 export default {
 	data() {
@@ -781,14 +771,16 @@ export default {
 	methods: {
 		testAsyncFunc() {
 			console.log(testModule);
-			// 调用异步方法
-			testModule.testAsyncFunc({
+			const param = {
 				'name': 'unimp',
-				'age': 1
-			}, (e) => {
+				'age': 1,
+			};
+			const paramStr = JSON.stringify(param);
+			// 调用异步方法
+			testModule.testAsyncFunc(paramStr, (e) => {
 				console.log(e);
 				uni.showToast({
-					title: JSON.stringify(e),
+					title: e,
 					icon:'none'
 				});
 			});
@@ -796,7 +788,7 @@ export default {
 		testSyncFunc() {
 			console.log(testModule);
 			// 调用同步方法
-			const ret = testModule.testSyncFunc();
+			const ret = testModule.testSyncFunc("hello");
 			console.log(ret);
 			this.title = ret || 'testSyncFail';
 		},
@@ -832,44 +824,82 @@ export default {
 </style>
 ```
 
-::: tips 打包参考
-参考`3.2 3.3 3.4`
-:::
+6. 拷贝资源文件
 
-## 6. 开发调试
+同`3.2`
 
-::: info 注意
-如果原生插件更新，需要重新打包基座
-:::
+## 5. Android Studio打包
 
-### 6.1. 制定自定义调试基座（云打包）
-
-选中`translate-app-vue2`项目 -> 发行 -> 原生App云打包 -> 打自定义调试基座
-
-![selfbase](./images/HBuilderX-cloud-selfbase.png)
-
-### 6.2 Android Studio基座（离线包）
+### 5.1. 自定义调试基座（尚未成功）
 
 参考官网: 
 [https://ask.dcloud.net.cn/article/35482](https://ask.dcloud.net.cn/article/35482)
+
+::: info 注意
+如果原生插件更新，需要重新选择原生插件（manifest.json），重新打包基座
+:::
 
 1. Build -> Build App Bundle(s)/APK(s) -> Build APK(s)
 
 ![build-debug](./images/android-studio-build-debug.png)
 
-2. 复制debug.apk
+2. `Android Studio`侧边栏`Gradle` -> `Translate-App` -> `Tasks` -> `other` -> `assembleDebug`
+
+![assembleDebug](./images/android-studio-assembleDebug.png)
+
+3. 复制debug.apk
 
 `/Translate-App/app/build/outputs/apk/debug/app-debug.apk`
 
-3. 粘贴到HBuilderX并重命名为android_debug.apk
+4. 粘贴到HBuilderX并重命名为android_debug.apk
 
 `/translate-app-vue2/unpackage/debug/android_debug.apk`
 
 ![android_debug_apk](./images/android_debug_apk.png)
 
-### 6.3. HBuilderX 真机调试
+### 5.2. HBuilderX云基座
 
-* 原生插件已经开发配置完毕，有助于调试业务代码
+选中项目 -> 发行 -> 原生云打包 -> 打自定义调试基座
+
+![cloud-base](./images/HBuilderX-cloud-base.png)
+
+>注意：Android包名，生成SourceMap，传统打包
+
+### 5.3. 打包正式版apk
+
+1. 需要调整的配置
+
+* `/Translate-App/app/src/main/Androidmanifest.xml`
+
+```console
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.jasvtfvan.release">
+...
+<meta-data android:name="dcloud_appkey" android:value="b910***离线打包key***f5b2" />
+```
+
+* `/Translate-App/app/build.gradle`
+
+```console
+...
+        applicationId 'com.jasvtfvan.release'
+...
+```
+
+2. studio打包
+
+`Build` -> `Generate Signed App Bundle / APK` -> `APK` -> 下图 -> Next -> Release
+
+![keystore](./images/android-studio-apk.png)
+
+3. 打包后apk所在路径
+
+`/app/release/app-release.apk`
+
+## 6. 开发调试
+
+### 6.1. 配置android设备
 
 * `android掌上学习机`(android5.1.1)
 
@@ -895,21 +925,22 @@ Settings->System->Developer options->开启顶部总开关(On)->Debugging->开�
 * **开启**：“仅充电”模式下运行ADB调试
 :::
 
-2. MAC连接`android`设备，安装驱动助手（如：华为荣耀，安装手机助手）
-根据步骤一步步连接
+### 6.3. HBuilderX 真机调试
 
-3. MAC打开`关于本机`->`系统报告`->`硬件/USB`->`USB 3.1 总线`
+* 原生插件已经开发配置完毕，有助于调试业务代码
+
+1. MAC打开`关于本机`->`系统报告`->`硬件/USB`->`USB 3.1 总线`
 找到华为设备，复制`厂商ID`
 
-4. 打开MAC终端，输入命令
+2. 打开MAC终端，输入命令
 
 ```bash
 echo 0x12d1 >> ~/.android/adb_usb.ini
 ```
 
-5. 重启adb（HBuilderX）
+3. 重启adb（HBuilderX）
 
-6. HBuilderX
+4. HBuilderX运行
 
 选中项目 -> 运行 -> 运行到手机或模拟器 -> 运行到Android App基座 ->
 
@@ -920,3 +951,4 @@ echo 0x12d1 >> ~/.android/adb_usb.ini
 
 * 有助于调试原生插件
 
+![android-studio-debug](./images/android-studio-debug.png)
