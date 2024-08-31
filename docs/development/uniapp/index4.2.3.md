@@ -723,6 +723,7 @@ dependencies {
 	"_dp_nativeplugin":{
 		"android": {
 			"integrateType":"aar",
+			"minSdkVersion":21,
 			"plugins": [
 				{
 					"type": "module",
