@@ -332,6 +332,10 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
 1. `/Translate-App/app/src/main/Androidmanifest.xml`
 
 ```console
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.jasvtfvan.translation">
+...
 <meta-data android:name="dcloud_appkey" android:value="b1bf***1b89" />
 ```
 
