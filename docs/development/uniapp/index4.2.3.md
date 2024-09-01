@@ -714,6 +714,12 @@ dependencies {
 
 5. 修改uniapp代码
 
+::: danger 注意
+对于.vue文件，只能使用JSBridge进行桥接，因此跟Native Android只能通过字符串相互传参
+
+对于.nvue文件，由于其底层通过weex实现了Native代码，因此可以通对象相互传参，但weex方案过旧不推荐使用
+:::
+
 ```html
 <template>
 	<view class="content">
