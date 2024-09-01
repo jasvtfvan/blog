@@ -269,19 +269,17 @@ uni-app为了调试性能的原因，修改easycom规则不会实时生效，配
 
 ![生成离线key](./images/dcloud-build-key.png)
 
-2. 创建
+2. 创建（只要正式版）
 
 ![生成离线key](./images/dcloud-build-key1.png)
+
+::: danger 提示
+创建时只创建正式版即可，测试版无法在Android Studio中Debug调试
+:::
 
 3. 查看离线打包key（**dcloud_appkey**）
 
 ![生成离线key](./images/dcloud-build-key2.png)
-
-::: tip 包名/appid/域名
-release版本:     com.jasvtfvan.release
-
-debug版本:       com.jasvtfvan.debug	
-:::
 
 ## 3. 离线Android项目
 
@@ -352,22 +350,10 @@ debug版本:       com.jasvtfvan.debug
 ```console
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jasvtfvan.debug">
+    package="com.jasvtfvan.translate">
 ...
-<meta-data android:name="dcloud_appkey" android:value="0737***离线打包key***79f7" />
+<meta-data android:name="dcloud_appkey" android:value="2cec***离线打包key***5d50" />
 ```
-
-::: danger 注意
-```console
-正式版使用【com.jasvtfvan.release】
-自定义基座调试/测试版本使用【com.jasvtfvan.debug】
-```
----
-```console
-正式版使用`release`版的【离线打包key】
-自定义基座调试/测试版使用`debug`版的【离线打包key】
-```
-:::
 
 2. `/Translate-App/app/src/main/res/values/strings.xml`
 
@@ -400,14 +386,14 @@ android {
     compileSdkVersion 30
     buildToolsVersion '30.0.3'
     defaultConfig {
-        applicationId 'com.jasvtfvan.debug'
+        applicationId 'com.jasvtfvan.translate'
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 100
         versionName "1.0.0"
         multiDexEnabled true
         ndk {
-            abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+            abiFilters 'x86', 'armeabi-v7a', 'arm64-v8a'
         }
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_8
@@ -460,13 +446,6 @@ dependencies {
     implementation project(':mylibrary')
 }
 ```
-
-::: danger 【applicationId】取值
-```console
-正式版使用【com.jasvtfvan.release】
-自定义基座调试/测试版本使用【com.jasvtfvan.debug】
-```
-:::
 
 ## 4. 原生插件
 
@@ -659,20 +638,17 @@ dependencies {
 
 #### 4.1.3. 插件打包
 
+::: tip 提示
+插件打包用于HBuilderX调试
+:::
+
 1. 利用`Gradle`打包
 
-`Android Studio`侧边栏`Gradle` -> `Translate-App` -> `Tasks` -> `other` -> `assembleDebug`
+`Android Studio`侧边栏`Gradle` -> `Translate-App` -> `Tasks` -> `other` -> `assembleRelease`
 
 ![assembleRelease](./images/android-studio-assembleRelease.png)
 
-::: danger assembleDebug/assembleRelease
-```console
-正式版点击【assembleRelease】
-自定义基座调试/测试版本点击【assembleDebug】
-```
-:::
-
-2. 拷贝`mylibrary-release.aar`或`mylibrary-debug.aar`文件，路径在
+2. 拷贝`mylibrary-release.aar`文件，路径在
 
 `/Translate-App/mylibrary/build/outputs/aar/`
 
@@ -715,7 +691,7 @@ dependencies {
 }
 ```
 
-3. 粘贴`mylibrary-debug.aar`或`mylibrary-release.aar`
+3. 粘贴`mylibrary-release.aar`
 
 ![folder-struct](./images/HBuilderX-plugins-folder-struct.png)
 
@@ -726,7 +702,7 @@ dependencies {
 │  │  ├─ libs                   ---> libs目录
 │  │  │  ├─ some.jar            ---> 依赖的jar（当前不存在）
 │  │  │  └─ lib-some.so         ---> 依赖的so文件（当前项目不存在）
-│  │  ├─ mylibrary-debug.aar  ---> 插件aar
+│  │  ├─ mylibrary-release.aar  ---> 插件aar
 │  │  └─ some.aar               ---> 基础依赖的aar（当前项目不存在）
 │  └─ package.json              ---> 配置文件
 ```
@@ -826,70 +802,25 @@ export default {
 
 6. 拷贝资源文件
 
-同`3.2`
+* 生成打包资源
+
+![build](./images/HBuilderX-build.png)
+
+* 从`HBuilderX`拷贝静态资源到app主模块
+
+![拷贝静态资源](./images/upiapp-copy-assets.png)
 
 ## 5. Android Studio打包
 
-### 5.1. 自定义调试基座（尚未成功）
+### 5.1. 打包apk（调试/发布）
 
-参考官网: 
-[https://ask.dcloud.net.cn/article/35482](https://ask.dcloud.net.cn/article/35482)
-
-::: info 注意
-如果原生插件更新，需要重新选择原生插件（manifest.json），重新打包基座
+::: tip 提示
+app-debug.apk 用于Android Studio调试
 :::
 
-1. Build -> Build App Bundle(s)/APK(s) -> Build APK(s)
+1. studio打包
 
-![build-debug](./images/android-studio-build-debug.png)
-
-2. `Android Studio`侧边栏`Gradle` -> `Translate-App` -> `Tasks` -> `other` -> `assembleDebug`
-
-![assembleDebug](./images/android-studio-assembleDebug.png)
-
-3. 复制debug.apk
-
-`/Translate-App/app/build/outputs/apk/debug/app-debug.apk`
-
-4. 粘贴到HBuilderX并重命名为android_debug.apk
-
-`/translate-app-vue2/unpackage/debug/android_debug.apk`
-
-![android_debug_apk](./images/android_debug_apk.png)
-
-### 5.2. HBuilderX云基座
-
-选中项目 -> 发行 -> 原生云打包 -> 打自定义调试基座
-
-![cloud-base](./images/HBuilderX-cloud-base.png)
-
->注意：Android包名，生成SourceMap，传统打包
-
-### 5.3. 打包正式版apk
-
-1. 需要调整的配置
-
-* `/Translate-App/app/src/main/Androidmanifest.xml`
-
-```console
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jasvtfvan.release">
-...
-<meta-data android:name="dcloud_appkey" android:value="b910***离线打包key***f5b2" />
-```
-
-* `/Translate-App/app/build.gradle`
-
-```console
-...
-        applicationId 'com.jasvtfvan.release'
-...
-```
-
-2. studio打包
-
-`Build` -> `Generate Signed App Bundle / APK` -> `APK` -> 下图 -> Next -> Release
+`Build` -> `Generate Signed App Bundle / APK` -> `APK` -> `Next` -> `Release`（或Debug）
 
 ![keystore](./images/android-studio-apk.png)
 
@@ -897,21 +828,52 @@ export default {
 
 `/app/release/app-release.apk`
 
+`/app/debug/app-debug.apk`
+
+### 5.2. 离线自定义调试基座
+
+* Android Studio
+
+1. 添加`debug-server-release.aar`到libs中
+
+2. `build.gradle`中添加依赖
+
+```console
+...
+dependencies {
+...
+    // 离线基座
+    implementation 'com.squareup.okhttp3:okhttp:3.12.12'
+
+    implementation project(':mylibrary')
+}
+```
+
+3. Build -> Build App Bundle(s)/APK(s) -> Build APK(s)
+
+4. 复制debug.apk
+
+`/Translate-App/app/build/outputs/apk/debug/app-debug.apk`
+
+![android-studio-base](./images/android-studio-base.png)
+
+* HBuiderX
+
+粘贴到HBuilderX并重命名为android_debug.apk
+
+`/translate-app-vue2/unpackage/debug/android_debug.apk`
+
+![android_debug_apk](./images/android_debug_apk.png)
+
 ## 6. 开发调试
 
 ### 6.1. 配置android设备
 
-* `android掌上学习机`(android5.1.1)
+1. `android掌上学习机`(android5.1.1)
 
-1. android手机
 Settings->System->Developer options->开启顶部总开关(On)->Debugging->开启USB debugging
 
-2. HBuilderX
-选中项目->运行->运行到手机或模拟器->运行到Android App基座
-
-* `华为手机`
-
-1. android手机
+2. `华为手机`
 
 手机设置->关于手机->版本号（连点2-7下开启开发者模式）
 
@@ -927,7 +889,7 @@ Settings->System->Developer options->开启顶部总开关(On)->Debugging->开�
 
 ### 6.3. HBuilderX 真机调试
 
-* 原生插件已经开发配置完毕，有助于调试业务代码
+* 有助于调试业务代码
 
 1. MAC打开`关于本机`->`系统报告`->`硬件/USB`->`USB 3.1 总线`
 找到华为设备，复制`厂商ID`
@@ -947,8 +909,14 @@ echo 0x12d1 >> ~/.android/adb_usb.ini
 * 无原生插件：`使用标准基座运行`
 * 有原生插件：`使用自定义调试基座运行`
 
+![HBuilderX-debug](./images/HBuidlerX-debug.png)
+
 ### 6.4. Android Studio 真机调试
 
-* 有助于调试原生插件
+* 有助于调试原生代码
+
+1. 打包完毕（见5.1打包apk） `/app/debug/app-debug.apk`
+
+2. `debug`调试
 
 ![android-studio-debug](./images/android-studio-debug.png)
