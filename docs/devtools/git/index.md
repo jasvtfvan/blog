@@ -321,7 +321,7 @@ IdentityFile ~/.ssh/id_rsa_another
 6. 测试弱链接
 ```sh
 ssh -T git@gitee.com
-ssh -T git@github.com
+ssh -vT git@github.com
 ssh -p 9222 -T git@123.56.159.159
 ssh -T -v git@s.github.com
 ```
