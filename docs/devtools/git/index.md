@@ -326,7 +326,11 @@ IdentityFile ~/.ssh/id_rsa_snapinspect
 PubkeyAcceptedAlgorithms +ssh-rsa
 HostkeyAlgorithms +ssh-rsa
 ```
-6. 测试弱链接
+6. 刷新ssh配置
+```sh
+ssh-agent -s
+```
+7. 测试弱链接
 ```sh
 ssh -T git@gitee.com
 ssh -vT git@github.com
