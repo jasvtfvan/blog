@@ -304,19 +304,27 @@ ssh-keygen -t rsa -C anotherEmail@163.com
 Host gitee.com
 Hostname gitee.com
 IdentityFile ~/.ssh/id_rsa
+PubkeyAcceptedAlgorithms +ssh-rsa
+HostkeyAlgorithms +ssh-rsa
 
 Host github.com
 Hostname github.com
 IdentityFile ~/.ssh/id_rsa
+PubkeyAcceptedAlgorithms +ssh-rsa
+HostkeyAlgorithms +ssh-rsa
 
-Host 123.56.159.159
-Hostname 123.56.159.159
+Host 123.56.159.153
+Hostname 123.56.159.153
 IdentityFile ~/.ssh/id_rsa
+PubkeyAcceptedAlgorithms +ssh-rsa
+HostkeyAlgorithms +ssh-rsa
 
-#another
+#SnapInspect
 Host s.github.com
 Hostname github.com
-IdentityFile ~/.ssh/id_rsa_another
+IdentityFile ~/.ssh/id_rsa_snapinspect
+PubkeyAcceptedAlgorithms +ssh-rsa
+HostkeyAlgorithms +ssh-rsa
 ```
 6. 测试弱链接
 ```sh
@@ -325,7 +333,9 @@ ssh -vT git@github.com
 ssh -p 9222 -T git@123.56.159.159
 ssh -T -v git@s.github.com
 ```
->公式`ssh -T -v git@[config配置的host值]`,-v显示详细信息
+>公式`ssh -T -v git@[config配置的host值]`,-v显示详细信息<br>
+>`PubkeyAcceptedAlgorithms +ssh-rsa`和`HostkeyAlgorithms +ssh-rsa`用来兼容新老版本差异
+>如果有科学上网，需要命令窗口开启终端代理，参见`shadowsocks`
 
 ### 3.2 切换法（不推荐）
 1. 生成新的密钥对
