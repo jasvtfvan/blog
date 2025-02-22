@@ -20,9 +20,9 @@ git add -A
 git commit -m 'deploy'
 
 # 如果你想要部署到 https://<USERNAME>.github.io
-# git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git master
+# git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git main
 
 # 如果你想要部署到 https://<USERNAME>.github.io/<REPO>
-git push -f git@github.com:jasvtfvan/blog.git master:gh-pages
+git push -f git@github.com:jasvtfvan/blog.git main:gh-pages
 
 cd -
