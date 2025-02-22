@@ -310,7 +310,6 @@ HostkeyAlgorithms +ssh-rsa
 
 Host github.com
 Hostname github.com
-Port 443
 IdentityFile ~/.ssh/id_rsa
 PubkeyAcceptedAlgorithms +ssh-rsa
 HostkeyAlgorithms +ssh-rsa
@@ -330,14 +329,10 @@ IdentityFile ~/.ssh/id_rsa_snapinspect
 PubkeyAcceptedAlgorithms +ssh-rsa
 HostkeyAlgorithms +ssh-rsa
 ```
-6. 刷新ssh配置
-```sh
-ssh-agent -s
-```
-7. 测试弱链接
+6. 测试弱链接
 ```sh
 ssh -T git@gitee.com
-ssh -vT git@github.com
+ssh -vT git@github.com -p 22
 ssh -p 9222 -T git@123.56.159.159
 ssh -T -v git@s.github.com
 ```
