@@ -303,18 +303,21 @@ ssh-keygen -t rsa -C anotherEmail@163.com
 #Default
 Host gitee.com
 Hostname gitee.com
+Port 443
 IdentityFile ~/.ssh/id_rsa
 PubkeyAcceptedAlgorithms +ssh-rsa
 HostkeyAlgorithms +ssh-rsa
 
 Host github.com
 Hostname github.com
+Port 443
 IdentityFile ~/.ssh/id_rsa
 PubkeyAcceptedAlgorithms +ssh-rsa
 HostkeyAlgorithms +ssh-rsa
 
 Host 123.56.159.153
 Hostname 123.56.159.153
+Port 443
 IdentityFile ~/.ssh/id_rsa
 PubkeyAcceptedAlgorithms +ssh-rsa
 HostkeyAlgorithms +ssh-rsa
@@ -322,6 +325,7 @@ HostkeyAlgorithms +ssh-rsa
 #SnapInspect
 Host s.github.com
 Hostname github.com
+Port 443
 IdentityFile ~/.ssh/id_rsa_snapinspect
 PubkeyAcceptedAlgorithms +ssh-rsa
 HostkeyAlgorithms +ssh-rsa
